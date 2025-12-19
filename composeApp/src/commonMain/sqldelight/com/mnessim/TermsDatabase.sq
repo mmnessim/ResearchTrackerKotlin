@@ -1,0 +1,11 @@
+import kotlin.Boolean;
+
+CREATE TABLE Terms (
+    id INTEGER PRIMARY KEY NOT NULL,
+    term TEXT NOT NULL,
+    locked INTEGER AS Boolean NOT NULL
+);
+
+-- insertTerm:
+-- INSERT INTO Terms (term, locked)
+-- VALUES(?, ?);
