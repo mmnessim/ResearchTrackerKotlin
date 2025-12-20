@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.mnessim.researchtrackerkmp.domain.repositories.TermsRepo
+import com.mnessim.researchtrackerkmp.presentation.theme.lightScheme
 import org.koin.compose.koinInject
 
 
@@ -32,9 +32,10 @@ fun HomeScreen(
     val repo = koinInject<TermsRepo>()
     val viewmodel = remember { HomeScreenViewModel(repo) }
     val terms by viewmodel.terms.collectAsState()
-    val textFieldState = remember { TextFieldState() }
     var showAlertDialog by remember { mutableStateOf(false) }
-    MaterialTheme {
+    MaterialTheme(
+        colorScheme = lightScheme
+    ) {
         Column(
             modifier = modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -46,7 +47,11 @@ fun HomeScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "Research Tracker",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
                     modifier = Modifier.testTag("Title")
                 )
                 for (term in terms) {

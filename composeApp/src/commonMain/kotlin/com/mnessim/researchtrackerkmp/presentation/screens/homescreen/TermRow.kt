@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +34,8 @@ fun TermRow(
             content = {
                 Icon(
                     imageVector = if (term.locked) Icons.Default.Lock else Icons.Default.LockOpen,
-                    contentDescription = "Toggle Locked"
+                    contentDescription = "Toggle Locked",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             })
         IconButton(
@@ -42,7 +44,8 @@ fun TermRow(
             content = {
                 Icon(
                     imageVector = Icons.Default.Notifications,
-                    contentDescription = "Manage Notifications"
+                    contentDescription = "Manage Notifications",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             })
         IconButton(
@@ -54,6 +57,7 @@ fun TermRow(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete term",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         )
