@@ -110,7 +110,7 @@ compose.desktop {
 
 sqldelight {
     databases {
-        create("Terms") {
+        create("Database") {
             packageName.set("com.mnessim")
         }
     }
