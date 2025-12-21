@@ -6,7 +6,13 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import android.app.NotificationManager as AndroidNotificationManager
 
-actual class NotificationManager(private val context: Context) {
+actual class NotificationManager actual constructor() {
+    private lateinit var context: Context
+
+    fun init(context: Context) {
+        this.context = context
+    }
+
     actual fun showNotification(title: String, message: String) {
         val channelId = "default_channel"
         val manager =

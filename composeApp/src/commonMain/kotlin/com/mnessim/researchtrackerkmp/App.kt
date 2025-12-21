@@ -46,6 +46,7 @@ import com.mnessim.researchtrackerkmp.presentation.theme.darkScheme
 import com.mnessim.researchtrackerkmp.presentation.theme.highContrastDarkColorScheme
 import com.mnessim.researchtrackerkmp.presentation.theme.highContrastLightColorScheme
 import com.mnessim.researchtrackerkmp.presentation.theme.lightScheme
+import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 
@@ -60,6 +61,9 @@ fun App() {
     var showColorSchemeDialog by remember { mutableStateOf(false) }
 
     val prefsRepo = koinInject<PreferencesRepo>()
+    val manager = koinInject<NotificationManager>()
+
+    manager.showNotification("test", "test")
 
     loadColorScheme(prefsRepo, { it -> colorScheme = it })
 

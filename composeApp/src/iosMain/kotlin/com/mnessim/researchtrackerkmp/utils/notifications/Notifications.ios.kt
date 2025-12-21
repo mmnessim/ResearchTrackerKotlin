@@ -4,7 +4,7 @@ import platform.UserNotifications.UNMutableNotificationContent
 import platform.UserNotifications.UNNotificationRequest
 import platform.UserNotifications.UNUserNotificationCenter
 
-actual class NotificationManager {
+actual class NotificationManager actual constructor() {
     actual fun showNotification(title: String, message: String) {
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
