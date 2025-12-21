@@ -58,7 +58,7 @@ fun TermRow(
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontSize = 16.sp
                 )
-            )
+            ) // Text
             IconButton(
                 modifier = Modifier.testTag("ToggleLockButton"),
                 onClick = onToggleLock,
@@ -68,7 +68,8 @@ fun TermRow(
                         contentDescription = "Toggle Locked",
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-                })
+                }
+            ) // IconButton
             IconButton(
                 modifier = Modifier.testTag("TermNotificationsButton"),
                 onClick = {},
@@ -78,7 +79,8 @@ fun TermRow(
                         contentDescription = "Manage Notifications",
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-                })
+                }
+            ) // IconButton
             IconButton(
                 modifier = Modifier.testTag("DeleteButton"),
                 onClick = {
@@ -91,7 +93,7 @@ fun TermRow(
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
-            )
-        }
-    }
-}
+            ) // IconButton
+        } // Row
+    } // Box
+} // TermRow

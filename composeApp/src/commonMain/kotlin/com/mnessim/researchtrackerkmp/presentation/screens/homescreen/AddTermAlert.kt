@@ -27,16 +27,16 @@ fun AddTermAlert(
                 modifier = Modifier.testTag("DismissButton")
             ) {
                 Text("Dismiss")
-            }
-        },
+            } // TextButton
+        }, // dismissButton
         confirmButton = {
             TextButton(
                 onClick = onSubmit,
                 modifier = Modifier.testTag("SubmitButton")
             ) {
                 Text("Confirm")
-            }
-        },
+            } // TextButton
+        }, // confirmButton
         title = { Text("Alert Dialog") },
         text = {
             Column {
@@ -45,7 +45,7 @@ fun AddTermAlert(
                     state = textFieldState,
                     modifier = Modifier.testTag("TermTextField")
                 )
-            }
-        }
-    )
+            } // Column
+        } // text
+    ) // AlertDialog
 }
