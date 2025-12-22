@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.InvertColors
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,13 +65,18 @@ fun App() {
     val prefsRepo = koinInject<PreferencesRepo>()
     val manager = koinInject<NotificationManager>()
 
-    manager.showNotification("test", "test")
-
     loadColorScheme(prefsRepo, { it -> colorScheme = it })
 
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarColors(
+                    containerColor = colorScheme.primaryContainer,
+                    scrolledContainerColor = colorScheme.primaryContainer,
+                    navigationIconContentColor = colorScheme.onPrimaryContainer,
+                    titleContentColor = colorScheme.onPrimaryContainer,
+                    actionIconContentColor = colorScheme.onPrimaryContainer
+                ),
                 title = { Text("Research Tracker") },
                 navigationIcon = if (canPop) {
                     {
@@ -81,6 +88,12 @@ fun App() {
                     {}
                 }, // navigationIcon =
                 actions = {
+                    IconButton(onClick = { manager.showNotification("test", "test") }) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "Test Notifications"
+                        )
+                    }
                     Surface(
                         modifier = Modifier
                             .padding(horizontal = 18.dp)
@@ -101,9 +114,9 @@ fun App() {
                             contentDescription = "Toggle Dark Mode"
                         ) // Icon
                     } // Surface
-                } // actions =
+                }, // actions =
             ) // TopAppBar
-        } // topbar =
+        }, // topbar =
     ) { innerPadding ->
         MaterialTheme(
             colorScheme = colorScheme
