@@ -6,12 +6,13 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import platform.Foundation.NSNumber
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionSound
 import platform.UserNotifications.UNUserNotificationCenter
 
-fun MainViewController() = ComposeUIViewController {
+fun MainViewController(detailsId: NSNumber? = null) = ComposeUIViewController {
     val iosPlatformModule = module {
         single<DBFactory> { DBFactory() }
     }
@@ -23,7 +24,7 @@ fun MainViewController() = ComposeUIViewController {
         requestNotificationPermissions()
     }
 
-    App()
+    App(startDestination = if (detailsId == null) HomeRoute else DetailsRoute(id = detailsId.longValue))
 }
 
 fun requestNotificationPermissions() {
@@ -32,4 +33,9 @@ fun requestNotificationPermissions() {
         options = UNAuthorizationOptionAlert or UNAuthorizationOptionSound or UNAuthorizationOptionBadge,
         completionHandler = { granted, error -> }
     )
+}
+
+fun requestDetails() {
+    val center = UNUserNotificationCenter.currentNotificationCenter()
+
 }

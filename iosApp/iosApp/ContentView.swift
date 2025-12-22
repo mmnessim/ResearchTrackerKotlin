@@ -3,19 +3,21 @@ import SwiftUI
 import ComposeApp
 
 struct ComposeView: UIViewControllerRepresentable {
+    var detailsId: NSNumber?
+
     func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController()
+        MainViewControllerKt.MainViewController(detailsId: detailsId)
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
 }
 
 struct ContentView: View {
+    var detailsId: NSNumber?
+
     var body: some View {
-        ComposeView()
+        ComposeView(detailsId: detailsId)
             .ignoresSafeArea()
     }
 }
-
-
-
