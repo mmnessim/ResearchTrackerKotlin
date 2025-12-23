@@ -8,7 +8,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ColorSchemePickerDialog(
+fun ColorSchemeDialog(
     onDismiss: () -> Unit,
     onColorSchemeChange: (String) -> Unit,
 ) {
@@ -21,27 +21,21 @@ fun ColorSchemePickerDialog(
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(onClick = { onColorSchemeChange("light") }) {
                     Text("Light")
-                }
-                TextButton(onClick = {
-                    onColorSchemeChange("dark")
-                }) {
+                } // TextButton
+                TextButton(onClick = { onColorSchemeChange("dark") }) {
                     Text("Dark")
-                }
-            }
+                } // TextButton
+            } // Row
         }, // confirmButton =
         dismissButton = {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                TextButton(onClick = {
-                    onColorSchemeChange("lightContrast")
-                }) {
+                TextButton(onClick = { onColorSchemeChange("lightContrast") }) {
                     Text("Light Contrast")
-                }
-                TextButton(onClick = {
-                    onColorSchemeChange("darkContrast")
-                }) {
+                } // TextButton
+                TextButton(onClick = { onColorSchemeChange("darkContrast") }) {
                     Text("Dark Contrast")
-                }
-            }
+                } // TextButton
+            } // Row
         } // dismissButton =
     ) // AlertDialog
-}
+} // ColorSchemeDialog

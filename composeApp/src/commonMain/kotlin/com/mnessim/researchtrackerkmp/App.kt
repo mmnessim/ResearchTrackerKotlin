@@ -26,7 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mnessim.researchtrackerkmp.domain.repositories.PreferencesRepo
 import com.mnessim.researchtrackerkmp.presentation.core.AppBar
-import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemePickerDialog
+import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemeDialog
 import com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen.DetailsScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.homescreen.HomeScreen
 import com.mnessim.researchtrackerkmp.presentation.theme.darkScheme
@@ -37,6 +37,7 @@ import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,18 +53,20 @@ fun App(startDestination: AppRoute = HomeRoute) {
     val prefsRepo = koinInject<PreferencesRepo>()
     val manager = koinInject<NotificationManager>()
 
-    print("recompile")
-
-    LaunchedEffect(Unit) {
-        NavigationEvents.navigateToDetails.collectLatest { id ->
-            if (id != null) {
-                navController.navigate(DetailsRoute(id))
-                NavigationEvents.triggerNavigateToDetails(null)
+    // Ensures proper iOS navigation from notifications
+    if (isIos) {
+        LaunchedEffect(Unit) {
+            NavigationEvents.navigateToDetails.collectLatest { id ->
+                if (id != null) {
+                    navController.navigate(DetailsRoute(id))
+                    NavigationEvents.triggerNavigateToDetails(null)
+                }
             }
         }
     }
 
     loadColorScheme(prefsRepo, { it -> colorScheme = it })
+
 
     Scaffold(
         topBar = {
@@ -81,14 +84,14 @@ fun App(startDestination: AppRoute = HomeRoute) {
         ) {
 
             if (showColorSchemeDialog) {
-                ColorSchemePickerDialog(
+                ColorSchemeDialog(
                     onDismiss = { showColorSchemeDialog = false },
                     onColorSchemeChange = { it ->
                         onColorSchemeChange(
                             prefsRepo, it, { it -> colorScheme = it }
                         )
                     }
-                ) // ColorSchemePickerDialog
+                ) // ColorSchemeDialog
             } // if (showColorSchemeDialog)
 
 
