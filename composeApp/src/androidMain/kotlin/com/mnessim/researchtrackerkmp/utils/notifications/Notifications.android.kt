@@ -32,7 +32,7 @@ actual class NotificationManager actual constructor() {
 
         val intent = Intent(context, MainActivity::class.java).apply {
             putExtra("navigate_to", "details")
-            putExtra("details_id", id)
+            putExtra("details_id", id.toString())
         }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(

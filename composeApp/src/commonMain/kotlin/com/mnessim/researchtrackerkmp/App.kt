@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +36,8 @@ import com.mnessim.researchtrackerkmp.presentation.theme.highContrastLightColorS
 import com.mnessim.researchtrackerkmp.presentation.theme.lightScheme
 import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.first
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 
@@ -53,20 +56,32 @@ fun App(startDestination: AppRoute = HomeRoute) {
     val prefsRepo = koinInject<PreferencesRepo>()
     val manager = koinInject<NotificationManager>()
 
-    // Ensures proper iOS navigation from notifications
-    if (isIos) {
-        LaunchedEffect(Unit) {
-            NavigationEvents.navigateToDetails.collectLatest { id ->
-                if (id != null) {
-                    navController.navigate(DetailsRoute(id))
-                    NavigationEvents.triggerNavigateToDetails(null)
+
+    LaunchedEffect(Unit) {
+        NavigationEvents.navigateToDetails.collectLatest { id ->
+            println("Collected navigateToDetails event: $id")
+            if (id != null) {
+                val targetRoute = DetailsRoute(id)
+                navController.navigate(DetailsRoute(id)) {
+                    launchSingleTop = true
+                    restoreState = true
                 }
+                // Wait for the route to actually change
+                snapshotFlow { navController.currentBackStackEntry?.destination?.route }
+                    .dropWhile { newRoute ->
+                        println("Waiting for route change: $newRoute")
+                        newRoute != targetRoute.toString()
+                    }
+                    .first()
+                println("Route changed, resetting navigation event")
+                NavigationEvents.triggerNavigateToDetails(null)
             }
         }
     }
 
+
     loadColorScheme(prefsRepo, { it -> colorScheme = it })
-    
+
     Scaffold(
         topBar = {
             AppBar(

@@ -3,6 +3,7 @@ package com.mnessim.researchtrackerkmp
 import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -34,15 +35,23 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        setContent {
-            val startDestination = when (intent.getStringExtra("navigate_to")) {
-                "details" -> DetailsRoute(
-                    id = intent.getStringExtra("details_id")?.toLongOrNull() ?: 1L
-                )
+        handleIntent(intent)
 
-                else -> HomeRoute
-            }
-            App(startDestination = startDestination)
+        setContent {
+            App()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val detailsId = intent.getStringExtra("details_id")?.toLongOrNull()
+        android.util.Log.d("MainActivity", "handleIntent: detailsId = $detailsId")
+        if (detailsId != null) {
+            NavigationEvents.triggerNavigateToDetails(detailsId)
         }
     }
 }
