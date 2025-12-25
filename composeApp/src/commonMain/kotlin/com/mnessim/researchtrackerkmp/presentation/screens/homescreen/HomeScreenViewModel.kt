@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeScreenViewModel(private val termsRepo: ITermsRepo) : ViewModel() {
+class HomeScreenViewModel(
+    private val termsRepo: ITermsRepo
+) : ViewModel() {
     private var _terms = MutableStateFlow<List<Term>>(emptyList())
     val terms: StateFlow<List<Term>> = _terms.asStateFlow()
 

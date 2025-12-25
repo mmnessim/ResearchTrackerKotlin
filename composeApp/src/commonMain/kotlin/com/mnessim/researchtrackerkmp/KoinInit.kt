@@ -5,6 +5,7 @@ import com.mnessim.researchtrackerkmp.domain.data.DBFactory
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
 import com.mnessim.researchtrackerkmp.domain.repositories.PreferencesRepo
 import com.mnessim.researchtrackerkmp.domain.repositories.TermsRepo
+import com.mnessim.researchtrackerkmp.domain.services.HttpClientProvider
 import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -36,11 +37,16 @@ val notificationsModule = module {
     }
 }
 
+val clientModule = module {
+    single { HttpClientProvider().getClient() }
+}
+
 val commonModules: List<Module> = listOf(
     databaseModule,
     termsRepoModule,
     prefsRepoModule,
-    notificationsModule
+    notificationsModule,
+    clientModule,
 )
 
 //fun initKoin(vararg platformModules: Module) {
