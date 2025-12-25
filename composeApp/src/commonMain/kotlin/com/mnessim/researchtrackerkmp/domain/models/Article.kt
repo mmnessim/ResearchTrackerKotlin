@@ -1,5 +1,6 @@
 package com.mnessim.researchtrackerkmp.domain.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -7,16 +8,23 @@ data class Article(
     val title: String,
     val link: String,
     val guid: String,
-    val atomLink: String,
+    @SerialName("atom:link")
+    val atomLink: String? = null,
     val description: String,
-    val creator: String,
+    @SerialName("author")
+    val creator: String? = null,
     val pubDate: String,
-    val categories: List<String>,
-    val mediaContentUrl: String?,
-    val mediaContentHeight: Int?,
-    val mediaContentWidth: Int?,
-    val mediaCredit: String?,
-    val mediaDescription: String?
+    val categories: List<String> = emptyList(),
+    val mediaContentUrl: String? = null,
+    val mediaContentHeight: Int? = null,
+    val mediaContentWidth: Int? = null,
+    val mediaCredit: String? = null,
+    val mediaDescription: String? = null
+)
+
+@Serializable
+data class ArticleListResponse(
+    val articles: List<Article>
 )
 
 val placeholderArticle = Article(
