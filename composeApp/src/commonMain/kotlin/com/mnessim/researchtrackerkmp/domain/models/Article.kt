@@ -5,12 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Article(
+    val rssSource: String,
     val title: String,
     val link: String,
     val guid: String,
     @SerialName("atom:link")
     val atomLink: String? = null,
-    val description: String,
+    val description: String? = null,
     @SerialName("author")
     val creator: String? = null,
     val pubDate: String,
@@ -28,6 +29,7 @@ data class ArticleListResponse(
 )
 
 val placeholderArticle = Article(
+    rssSource = "New York Times",
     title = "Long Carrier Deployment Projects Strength in U.S. Pressure Campaign on Venezuela, and Carries Costs",
     link = "https://www.nytimes.com/2025/12/24/us/politics/aircraft-carrier-deployment-caribbean-costs.html",
     guid = "https://www.nytimes.com/2025/12/24/us/politics/aircraft-carrier-deployment-caribbean-costs.html",

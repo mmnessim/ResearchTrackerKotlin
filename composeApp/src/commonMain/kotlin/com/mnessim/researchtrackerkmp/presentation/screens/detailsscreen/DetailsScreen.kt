@@ -1,13 +1,11 @@
 package com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,12 +19,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import com.mnessim.researchtrackerkmp.domain.models.Article
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
 import com.mnessim.researchtrackerkmp.domain.services.ApiService
 import io.ktor.client.HttpClient
@@ -50,6 +45,7 @@ fun DetailsScreen(
     }
     val articles = viewModel.response.collectAsState()
     val term = viewModel.term
+    val showAmount = 20
 
     LaunchedEffect(key1 = id) {
         viewModel.fetch()
@@ -84,14 +80,16 @@ fun DetailsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for (a in articles.value) {
-                ArticleTile(
-                    modifier = Modifier.border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
-                    ), article = a
-                )
+            for ((index, a) in articles.value.withIndex()) {
+                if (index <= showAmount) {
+                    ArticleTile(
+                        modifier = Modifier.border(
+                            width = 2.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(8.dp)
+                        ), article = a
+                    )
+                }
             }
         }
 
@@ -99,60 +97,4 @@ fun DetailsScreen(
             Text("Back")
         } // Button
     } // Column
-}
-
-@Composable
-fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
-    val baseFontSize = 16
-
-    Column(modifier = modifier.padding(8.dp)) {
-        Text(
-            text = "${article.title} - ${article.creator}",
-            style = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = (baseFontSize + 8).sp
-            )
-        )
-        Text(
-            text = article.description,
-            style = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = (baseFontSize).sp
-            )
-        )
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState())
-        ) {
-            for ((i, c) in article.categories.withIndex()) {
-                Text(
-                    text = c,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = (baseFontSize - 4).sp
-                    )
-                )
-                if (i < article.categories.size) {
-                    Text(
-                        text = " | ",
-                        style = TextStyle(
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = (baseFontSize - 4).sp
-                        )
-                    )
-                }
-            }
-        }
-
-        if (article.mediaContentUrl != null) {
-            AsyncImage(
-                model = article.mediaContentUrl,
-                contentDescription = article.mediaDescription,
-                modifier = Modifier
-                    .fillMaxWidth(.9f)
-                    .height(150.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-
 }
