@@ -1,5 +1,7 @@
 package com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -52,8 +55,6 @@ fun DetailsScreen(
         viewModel.fetch()
     }
 
-//    val articles = listOf(placeholderArticle)
-
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -80,10 +81,17 @@ fun DetailsScreen(
                 .weight(1f)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             for (a in articles.value) {
-                ArticleTile(a)
+                ArticleTile(
+                    modifier = Modifier.border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp)
+                    ), article = a
+                )
             }
         }
 
@@ -94,40 +102,57 @@ fun DetailsScreen(
 }
 
 @Composable
-fun ArticleTile(article: Article) {
+fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
     val baseFontSize = 16
 
-    Text(
-        text = "${article.title} - ${article.creator}",
-        style = TextStyle(
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = (baseFontSize + 8).sp
-        )
-    )
-    Text(
-        text = article.description,
-        style = TextStyle(
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = (baseFontSize).sp
-        )
-    )
-    for (c in article.categories) {
+    Column(modifier = modifier.padding(8.dp)) {
         Text(
-            text = c,
+            text = "${article.title} - ${article.creator}",
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = (baseFontSize + 8).sp
+            )
+        )
+        Text(
+            text = article.description,
             style = TextStyle(
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = (baseFontSize).sp
             )
         )
+        Row(
+            modifier = Modifier.horizontalScroll(rememberScrollState())
+        ) {
+            for ((i, c) in article.categories.withIndex()) {
+                Text(
+                    text = c,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = (baseFontSize - 4).sp
+                    )
+                )
+                if (i < article.categories.size) {
+                    Text(
+                        text = " | ",
+                        style = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = (baseFontSize - 4).sp
+                        )
+                    )
+                }
+            }
+        }
+
+        if (article.mediaContentUrl != null) {
+            AsyncImage(
+                model = article.mediaContentUrl,
+                contentDescription = article.mediaDescription,
+                modifier = Modifier
+                    .fillMaxWidth(.9f)
+                    .height(150.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
     }
-    if (article.mediaContentUrl != null) {
-        AsyncImage(
-            model = article.mediaContentUrl,
-            contentDescription = article.mediaDescription,
-            modifier = Modifier
-                .fillMaxWidth(.9f)
-                .height(150.dp),
-            contentScale = ContentScale.Crop
-        )
-    }
+
 }
