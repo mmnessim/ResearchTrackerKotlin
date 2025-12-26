@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,7 +45,7 @@ fun DetailsScreen(
     }
     val articles = viewModel.response.collectAsState()
     val term = viewModel.term
-    val showAmount = 20
+    val showAmount = 50
 
     LaunchedEffect(key1 = id) {
         viewModel.fetch()
@@ -57,39 +57,38 @@ fun DetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        if (term != null) {
-            Row(
-                modifier = Modifier.fillMaxWidth(.9f),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = term.term,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 20.sp
-                    )
-                )
-            } // Row
-        } // if (term != null)
-
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Button(onClick = { viewModel.sort("source") }) {
+            Text("ReSort")
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(.9f),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            for ((index, a) in articles.value.withIndex()) {
-                if (index <= showAmount) {
-                    ArticleTile(
-                        modifier = Modifier.border(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(8.dp)
-                        ), article = a
-                    )
-                }
+            Text(
+                text = term.term,
+                style = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 20.sp
+                )
+            ) // Text
+        } // Row
+
+        LazyColumn(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            items(articles.value.take(showAmount + 1), key = { it.guid }) { a ->
+                ArticleTile(
+                    modifier = Modifier.border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                    article = a
+                )
             }
         }
 

@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailsScreenViewModel(
-    private val id: Long,
-    private val termsRepo: ITermsRepo,
+    id: Long,
+    termsRepo: ITermsRepo,
     private val apiService: ApiService
 ) : ViewModel() {
 
@@ -24,7 +24,16 @@ class DetailsScreenViewModel(
 
     fun fetch() {
         viewModelScope.launch {
+            println("API called")
             _response.value = apiService.search(term.term)
         }
+    }
+
+    fun sort(by: String) {
+        when (by) {
+            "source" -> _response.value = _response.value.sortedBy { article -> article.rssSource }
+            else -> return
+        }
+
     }
 }
