@@ -27,7 +27,7 @@ class HomeScreenTest {
         }
         try {
             setContent {
-                HomeScreen(onNavigate = {})
+                HomeScreen(onNavigate = {}, onNotificationButton = {})
             }
             // Basic UI elements with no terms
             onNodeWithTag("AddTermButton").assertExists().performClick()
@@ -57,22 +57,20 @@ class HomeScreenTest {
 }
 
 class FakeTermsRepo : ITermsRepo {
-    private val terms = mutableListOf<Term>()
-    private var nextId = 1L
+    private val terms = mutableListOf(
+        Term(id = 1L, term = "Test Term", locked = false)
+    )
 
     override fun getAllTerms(): List<Term> = terms.toList()
-
     override fun getTermById(id: Long): Term? = terms.find { it.id == id }
-
     override fun insertTerm(term: String, locked: Boolean) {
-        terms.add(Term(id = nextId++, term = term, locked = locked))
+        val nextId = (terms.maxOfOrNull { it.id } ?: 0L) + 1
+        terms.add(Term(id = nextId, term = term, locked = locked))
     }
 
     override fun updateTerm(term: Term) {
-        val index = terms.indexOfFirst { it.id == term.id }
-        if (index != -1) {
-            terms[index] = term
-        }
+        val idx = terms.indexOfFirst { it.id == term.id }
+        if (idx != -1) terms[idx] = term
     }
 
     override fun deleteTerm(id: Long) {

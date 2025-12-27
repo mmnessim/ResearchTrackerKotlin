@@ -12,8 +12,14 @@ class ApiService(private val client: HttpClient) {
     private val json = Json { ignoreUnknownKeys = true }
 
     suspend fun search(term: String): List<Article> {
-        val response = client.get("$url/search/$term")
-        val bodyString = response.bodyAsText()
-        return json.decodeFromString<List<Article>>(bodyString)
+        return try {
+            val response = client.get("$url/search/$term")
+            val bodyString = response.bodyAsText()
+            json.decodeFromString<List<Article>>(bodyString)
+        } catch (e: Exception) {
+            println(e)
+            emptyList()
+        }
+
     }
 }

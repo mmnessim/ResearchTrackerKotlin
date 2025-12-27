@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +54,8 @@ fun DetailsScreen(
 
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag("DetailsScreenOuterColumn"),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -61,10 +63,12 @@ fun DetailsScreen(
             Text("ReSort")
         }
         Row(
-            modifier = Modifier.fillMaxWidth(.9f),
+            modifier = Modifier.fillMaxWidth(.9f)
+                .testTag("DetailsScreenTermRow"),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
+                modifier = Modifier.testTag("Term"),
                 text = term.term,
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.onSurface,
@@ -76,7 +80,8 @@ fun DetailsScreen(
         LazyColumn(
             modifier = Modifier
                 .padding(8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag("ArticlesColumn"),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -86,13 +91,14 @@ fun DetailsScreen(
                         width = 2.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(8.dp)
-                    ),
+                    )
+                        .testTag("ArticleTile"),
                     article = a
                 )
             }
         }
 
-        Button(onClick = onBack) {
+        Button(onClick = onBack, modifier = Modifier.testTag("BackButton")) {
             Text("Back")
         } // Button
     } // Column
