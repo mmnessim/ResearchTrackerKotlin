@@ -35,7 +35,6 @@ fun HomeScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
-//            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
