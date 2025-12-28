@@ -22,6 +22,7 @@ import org.koin.compose.koinInject
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Long) -> Unit,
+    onNavigateToTiles: () -> Unit,
     onNotificationButton: (Term) -> Unit,
 ) {
     val repo = koinInject<ITermsRepo>()
@@ -38,7 +39,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for ((index, term) in terms.withIndex()) {
+            for (term in terms) {
                 TermRow(
                     term = term,
                     onDelete = { viewmodel.removeTerm(term.id) },

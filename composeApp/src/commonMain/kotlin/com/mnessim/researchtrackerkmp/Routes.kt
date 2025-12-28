@@ -9,3 +9,6 @@ object HomeRoute : AppRoute
 
 @Serializable
 data class DetailsRoute(val id: Long) : AppRoute
+
+@Serializable
+object NavTilesRoute : AppRoute

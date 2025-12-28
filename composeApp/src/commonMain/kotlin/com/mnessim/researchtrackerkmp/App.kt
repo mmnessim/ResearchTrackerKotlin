@@ -1,9 +1,8 @@
 package com.mnessim.researchtrackerkmp
 
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import com.mnessim.researchtrackerkmp.presentation.core.AppBar
 import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemeDialog
 import com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen.DetailsScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.homescreen.HomeScreen
+import com.mnessim.researchtrackerkmp.presentation.screens.navTilesScreen.NavTilesScreen
 import com.mnessim.researchtrackerkmp.presentation.theme.darkScheme
 import com.mnessim.researchtrackerkmp.presentation.theme.highContrastDarkColorScheme
 import com.mnessim.researchtrackerkmp.presentation.theme.highContrastLightColorScheme
@@ -46,10 +46,10 @@ import org.koin.compose.koinInject
 @Composable
 @Suppress("UNUSED_VARIABLE")
 @Preview
-fun App(startDestination: AppRoute = HomeRoute) {
+fun App(startDestination: AppRoute = NavTilesRoute) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val canPop = navBackStackEntry?.destination?.route != HomeRoute::class.qualifiedName
+    val canPop = navBackStackEntry?.destination?.route != NavTilesRoute::class.qualifiedName
     var colorScheme by remember { mutableStateOf(lightScheme) }
     var showColorSchemeDialog by remember { mutableStateOf(false) }
 
@@ -117,10 +117,10 @@ fun App(startDestination: AppRoute = HomeRoute) {
                 NavHost(
                     navController = navController,
                     startDestination = startDestination,
-                    enterTransition = { slideInHorizontally { it } + fadeIn() },
-                    exitTransition = { slideOutHorizontally { -it } + fadeOut() },
-                    popEnterTransition = { slideInHorizontally { -it } + fadeIn() },
-                    popExitTransition = { slideOutHorizontally { it } + fadeOut() }
+                    enterTransition = { fadeIn(animationSpec = tween(durationMillis = 180)) },
+                    exitTransition = { fadeOut(animationSpec = tween(durationMillis = 180)) },
+                    popEnterTransition = { fadeIn(animationSpec = tween(durationMillis = 140)) },
+                    popExitTransition = { fadeOut(animationSpec = tween(durationMillis = 140)) }
                 ) {
                     composable<HomeRoute> {
                         HomeScreen(
@@ -129,6 +129,7 @@ fun App(startDestination: AppRoute = HomeRoute) {
                                 .fillMaxSize()
                                 .background(MaterialTheme.colorScheme.surfaceContainer),
                             onNavigate = { id -> navController.navigate(DetailsRoute(id)) },
+                            onNavigateToTiles = { navController.navigate(NavTilesRoute) },
                             onNotificationButton = { term ->
                                 manager.showNotification(
                                     title = term.term,
@@ -151,6 +152,15 @@ fun App(startDestination: AppRoute = HomeRoute) {
                             id = details.id
                         )
                     } // composable<Details>
+                    composable<NavTilesRoute> {
+                        NavTilesScreen(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surfaceContainer),
+                            onHome = { navController.navigate(HomeRoute) }
+                        )
+                    }
                 } // NavHost
             } // Box
         } // MaterialTheme
