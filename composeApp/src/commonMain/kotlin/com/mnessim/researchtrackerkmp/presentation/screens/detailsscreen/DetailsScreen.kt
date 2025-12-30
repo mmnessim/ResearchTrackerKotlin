@@ -56,7 +56,7 @@ fun DetailsScreen(
     val loading = viewModel.loading.collectAsState()
     val term = viewModel.term
 
-    var showAmount by remember { mutableStateOf(10) }
+    var showAmount by remember { mutableStateOf(50) }
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -72,8 +72,21 @@ fun DetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(onClick = { viewModel.sort("source") }) {
-            Text("ReSort")
+        Button(
+            onClick = {
+                viewModel.sort("source")
+                coroutineScope.launch { listState.animateScrollToItem(0) }
+            }
+        ) {
+            Text("Sort by Source")
+        }
+        Button(
+            onClick = {
+                viewModel.sort("date")
+                coroutineScope.launch { listState.animateScrollToItem(0) }
+            }
+        ) {
+            Text("Sort by Date")
         }
         Row(
             modifier = Modifier.fillMaxWidth(.9f)
@@ -89,8 +102,6 @@ fun DetailsScreen(
                 )
             )
         }
-
-        Text("GUID: ${term.lastArticleGuid ?: "None"}")
 
         if (!loading.value) {
             LazyColumn(

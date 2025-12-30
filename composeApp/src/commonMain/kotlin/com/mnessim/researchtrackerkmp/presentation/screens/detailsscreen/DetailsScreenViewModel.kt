@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 class DetailsScreenViewModel(
     id: Long,
     private val termsRepo: ITermsRepo,
@@ -38,6 +41,9 @@ class DetailsScreenViewModel(
         // TODO: add more options
         when (by) {
             "source" -> _response.value = _response.value.sortedBy { article -> article.rssSource }
+            "date" -> _response.value =
+                _response.value.sortedByDescending { article -> parsePubDate(article.pubDate) }
+
             else -> return
         }
     }
@@ -58,6 +64,15 @@ class DetailsScreenViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun parsePubDate(pubDate: String?): Long {
+        if (pubDate.isNullOrBlank()) return Long.MIN_VALUE
+        return try {
+            Instant.parse(pubDate).toEpochMilliseconds()
+        } catch (e: Exception) {
+            pubDate.toLongOrNull() ?: Long.MIN_VALUE
         }
     }
 }

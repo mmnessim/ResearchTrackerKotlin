@@ -60,13 +60,16 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                     fontSize = (baseFontSize).sp
                 )
             )
-            Text(
-                text = article.description ?: "",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = (baseFontSize).sp
+            if (article.rssSource != "2 Minute Medicine") {
+                Text(
+                    text = article.description ?: "",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = (baseFontSize).sp
+                    )
                 )
-            )
+            }
+
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
