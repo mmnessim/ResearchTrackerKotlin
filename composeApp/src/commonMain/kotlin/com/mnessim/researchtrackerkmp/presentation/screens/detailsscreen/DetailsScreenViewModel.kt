@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class DetailsScreenViewModel(
     id: Long,
-    termsRepo: ITermsRepo,
+    private val termsRepo: ITermsRepo,
     private val apiService: ApiService
 ) : ViewModel() {
 
@@ -30,14 +30,34 @@ class DetailsScreenViewModel(
             println("API called")
             _response.value = apiService.search(term.term)
             _loading.value = false
+            updateGuid()
         }
     }
 
     fun sort(by: String) {
+        // TODO: add more options
         when (by) {
             "source" -> _response.value = _response.value.sortedBy { article -> article.rssSource }
             else -> return
         }
+    }
 
+    private fun updateGuid() {
+        if (_response.value.isNotEmpty()) {
+            viewModelScope.launch {
+                val guid = _response.value.first().guid
+                if (guid != term.lastArticleGuid) {
+                    println("Updating GUID")
+                    termsRepo.updateTerm(
+                        Term(
+                            id = term.id,
+                            term = term.term,
+                            locked = term.locked,
+                            lastArticleGuid = guid
+                        )
+                    )
+                }
+            }
+        }
     }
 }

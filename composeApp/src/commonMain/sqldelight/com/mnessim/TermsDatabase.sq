@@ -3,16 +3,17 @@ import kotlin.Boolean;
 CREATE TABLE Terms (
     id INTEGER PRIMARY KEY NOT NULL,
     term TEXT NOT NULL,
-    locked INTEGER AS Boolean
+    locked INTEGER AS Boolean,
+    lastArticleGuid TEXT
 );
 
 insertTerm:
-INSERT INTO Terms (term, locked)
-VALUES (?, ?);
+INSERT INTO Terms (term, locked, lastArticleGuid)
+VALUES (?, ?, ?);
 
 updateTerm:
 UPDATE Terms
-SET term = ?, locked = ?
+SET term = ?, locked = ?, lastArticleGuid = ?
 WHERE id = ?;
 
 selectAll:
@@ -27,7 +28,3 @@ WHERE id = ?;
 deleteTerm:
 DELETE FROM Terms
 WHERE id = ?;
-
--- selectAllTerms:
--- SELECT *
--- FROM Terms;

@@ -1,0 +1,1 @@
+ALTER TABLE Terms ADD COLUMN lastArticleGuid TEXT;

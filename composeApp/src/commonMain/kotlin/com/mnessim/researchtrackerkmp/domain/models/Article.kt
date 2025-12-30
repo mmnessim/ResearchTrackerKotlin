@@ -23,11 +23,6 @@ data class Article(
     val mediaDescription: String? = null
 )
 
-@Serializable
-data class ArticleListResponse(
-    val articles: List<Article>
-)
-
 val placeholderArticle = Article(
     rssSource = "New York Times",
     title = "Long Carrier Deployment Projects Strength in U.S. Pressure Campaign on Venezuela, and Carries Costs",

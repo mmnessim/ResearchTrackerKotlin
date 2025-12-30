@@ -90,6 +90,8 @@ fun DetailsScreen(
             )
         }
 
+        Text("GUID: ${term.lastArticleGuid ?: "None"}")
+
         if (!loading.value) {
             LazyColumn(
                 state = listState,
