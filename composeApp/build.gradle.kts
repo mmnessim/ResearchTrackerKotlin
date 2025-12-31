@@ -42,6 +42,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.work.runtime)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -88,8 +89,8 @@ android {
         applicationId = "com.mnessim.researchtrackerkmp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.2"
     }
     packaging {
         resources {

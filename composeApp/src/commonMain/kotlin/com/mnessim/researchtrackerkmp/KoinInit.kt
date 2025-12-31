@@ -41,6 +41,7 @@ val clientModule = module {
     single { HttpClientProvider().getClient() }
 }
 
+
 val commonModules: List<Module> = listOf(
     databaseModule,
     termsRepoModule,

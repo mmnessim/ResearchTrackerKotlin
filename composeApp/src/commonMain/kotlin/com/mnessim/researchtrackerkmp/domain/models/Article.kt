@@ -8,7 +8,7 @@ data class Article(
     val rssSource: String,
     val title: String,
     val link: String,
-    val guid: String,
+    val guid: String? = null,
     @SerialName("atom:link")
     val atomLink: String? = null,
     val description: String? = null,

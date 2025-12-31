@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mnessim.researchtrackerkmp.domain.repositories.PreferencesRepo
 import com.mnessim.researchtrackerkmp.presentation.core.AppBar
+import com.mnessim.researchtrackerkmp.presentation.core.AppStartScheduler
 import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemeDialog
 import com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen.DetailsScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.homescreen.HomeScreen
@@ -109,6 +110,7 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                 ) // ColorSchemeDialog
             } // if (showColorSchemeDialog)
 
+            AppStartScheduler()
 
             Box(
                 modifier = Modifier

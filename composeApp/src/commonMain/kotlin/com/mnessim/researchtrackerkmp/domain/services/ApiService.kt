@@ -20,6 +20,5 @@ class ApiService(private val client: HttpClient) {
             println(e)
             emptyList()
         }
-
     }
 }
