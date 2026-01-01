@@ -14,7 +14,7 @@ data class Article(
     val description: String? = null,
     @SerialName("author")
     val creator: String? = null,
-    val pubDate: String,
+    val pubDate: String? = null,
     val categories: List<String> = emptyList(),
     val mediaContentUrl: String? = null,
     val mediaContentHeight: Int? = null,

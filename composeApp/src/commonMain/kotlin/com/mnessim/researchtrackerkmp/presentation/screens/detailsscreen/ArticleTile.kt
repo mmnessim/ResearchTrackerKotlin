@@ -31,13 +31,17 @@ import kotlin.time.Instant
 fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
     val baseFontSize = 16
 
-    val time = parseRfc822ToInstant(article.pubDate)
+    val time = parseRfc822ToInstant(article.pubDate ?: "")
     val estZone = TimeZone.of("America/New_York")
     val dateTime = time?.toLocalDateTime(estZone)
     val minuteStr = dateTime?.minute.toString().padStart(2, '0')
     val monthStr = dateTime?.month?.name?.lowercase()?.replaceFirstChar { it.uppercase() } ?: ""
     val timeStr = "$monthStr ${dateTime?.day} ${dateTime?.hour}:${minuteStr}"
     val urlHandler = LocalUriHandler.current
+
+    val actualTimeString = if (dateTime != null) {
+        timeStr
+    } else article.pubDate ?: ""
 
     SelectionContainer {
         Column(
@@ -54,7 +58,7 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                 )
             )
             Text(
-                text = if (dateTime != null) timeStr else article.pubDate,
+                text = actualTimeString,
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = (baseFontSize).sp
