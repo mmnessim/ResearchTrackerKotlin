@@ -9,7 +9,9 @@ import kotlinx.serialization.json.Json
 
 class ApiService(private val client: HttpClient) {
     val url = ConfigFlags.DEV_BACKEND_URL
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
 
     suspend fun search(term: String): List<Article> {
         return try {
