@@ -31,6 +31,7 @@ fun TermRow(
     modifier: Modifier = Modifier,
     term: Term,
     onDelete: () -> Unit,
+    onDeleteBlocked: () -> Unit,
     onToggleLock: () -> Unit,
     onNavigate: (Long) -> Unit,
     onNotificationButton: () -> Unit
@@ -88,7 +89,7 @@ fun TermRow(
             IconButton(
                 modifier = Modifier.testTag("DeleteButton"),
                 onClick = {
-                    if (!term.locked) onDelete()
+                    if (!term.locked) onDelete() else onDeleteBlocked()
                 },
                 content = {
                     Icon(
