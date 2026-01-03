@@ -5,6 +5,7 @@ import com.mnessim.researchtrackerkmp.domain.models.Article
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 
 class ApiService(private val client: HttpClient) {
@@ -21,6 +22,16 @@ class ApiService(private val client: HttpClient) {
         } catch (e: Exception) {
             println(e)
             emptyList()
+        }
+    }
+
+    suspend fun checkHealth(): HttpStatusCode {
+        try {
+            val response = client.get("$url/health")
+            return response.status
+        } catch (e: Exception) {
+            println("Error checking health: $e")
+            return HttpStatusCode.InternalServerError
         }
     }
 }

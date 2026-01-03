@@ -115,12 +115,18 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
 
 
 fun truncateText(text: String?, maxChars: Int): String {
-    if (text == null) return ""
+    if (text.isNullOrEmpty() || maxChars <= 0) return ""
     if (text.length <= maxChars) return text
-    val trimmed = text.take(maxChars).trimEnd()
-    val lastSpace = trimmed.lastIndexOf(' ')
-    val trimmedToLastWord = trimmed.take(lastSpace)
-    return "$trimmedToLastWord..."
+
+    val contentLimit = (maxChars - 3).coerceAtLeast(0)
+    var cut = text.take(contentLimit).trimEnd()
+
+    val lastWs = cut.indexOfLast { it.isWhitespace() }
+    if (lastWs > 0) {
+        cut = cut.substring(0, lastWs).trimEnd()
+    }
+
+    return cut + "..."
 }
 
 @OptIn(ExperimentalTime::class)

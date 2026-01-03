@@ -13,10 +13,11 @@ import com.mnessim.researchtrackerkmp.domain.models.Term
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
 import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import io.ktor.client.HttpClient
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext
 import java.util.concurrent.TimeUnit
 
-actual class WorkService {
+actual class WorkService : KoinComponent {
     private val appContext: Context
         get() = GlobalContext.getOrNull()
             ?.getOrNull<Context>()
@@ -25,7 +26,6 @@ actual class WorkService {
             )
     private val workManager: WorkManager
         get() = WorkManager.getInstance(appContext)
-
 
     actual fun scheduleWork(tag: String, periodic: Boolean, intervalMinutes: Long) {
         if (periodic) {
@@ -47,7 +47,7 @@ actual class WorkService {
     actual suspend fun performWork(): Boolean {
         TODO("Not yet implemented")
     }
-
+    
 }
 
 class WorkerDelegate(appContext: Context, params: WorkerParameters) :
