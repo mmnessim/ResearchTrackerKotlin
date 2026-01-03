@@ -5,6 +5,7 @@ import com.mnessim.researchtrackerkmp.domain.data.DBFactory
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
 import com.mnessim.researchtrackerkmp.domain.repositories.PreferencesRepo
 import com.mnessim.researchtrackerkmp.domain.repositories.TermsRepo
+import com.mnessim.researchtrackerkmp.domain.services.ColorSchemeService
 import com.mnessim.researchtrackerkmp.domain.services.HttpClientProvider
 import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import org.koin.core.module.Module
@@ -41,6 +42,12 @@ val clientModule = module {
     single { HttpClientProvider().getClient() }
 }
 
+val colorModule = module {
+    single<ColorSchemeService> {
+        ColorSchemeService()
+    }
+}
+
 
 val commonModules: List<Module> = listOf(
     databaseModule,
@@ -48,6 +55,7 @@ val commonModules: List<Module> = listOf(
     prefsRepoModule,
     notificationsModule,
     clientModule,
+    colorModule,
 )
 
 //fun initKoin(vararg platformModules: Module) {

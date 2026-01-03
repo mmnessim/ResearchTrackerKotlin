@@ -36,5 +36,6 @@ fun OptionsScreen(
                 )
             )
         }
+        OptionsTheme()
     }
 }
