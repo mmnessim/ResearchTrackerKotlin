@@ -21,7 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.mnessim.researchtrackerkmp.domain.services.ColorSchemeService
 import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemeDialog
@@ -62,7 +66,12 @@ fun OptionsTheme(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Set color scheme. Current: $colorSchemeText",
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append("Set color scheme. ")
+                    }
+                    append("Current: $colorSchemeText")
+                },
                 style = TextStyle(color = MaterialTheme.colorScheme.onPrimary)
             )
             IconButton(onClick = { showDialog = true }) {

@@ -1,5 +1,6 @@
 package com.mnessim.researchtrackerkmp.presentation.screens.optionsScreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +21,8 @@ fun OptionsScreen(
 
     Column(
         modifier = modifier
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = "Preferences: ",
@@ -37,5 +39,6 @@ fun OptionsScreen(
             )
         }
         OptionsTheme()
+        OptionsWorkInterval()
     }
 }

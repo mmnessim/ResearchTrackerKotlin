@@ -32,7 +32,7 @@ actual class WorkService : KoinComponent {
             val request = PeriodicWorkRequestBuilder<WorkerDelegate>(
                 intervalMinutes, TimeUnit.MINUTES
             )
-                .setInitialDelay(1, TimeUnit.SECONDS).build()
+                .setInitialDelay(intervalMinutes, TimeUnit.MINUTES).build()
             workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, request)
         } else {
             val request = OneTimeWorkRequestBuilder<WorkerDelegate>().build()
@@ -47,7 +47,7 @@ actual class WorkService : KoinComponent {
     actual suspend fun performWork(): Boolean {
         TODO("Not yet implemented")
     }
-    
+
 }
 
 class WorkerDelegate(appContext: Context, params: WorkerParameters) :

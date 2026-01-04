@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,7 @@ import io.ktor.client.HttpClient
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import kotlin.random.Random
 
@@ -47,11 +49,12 @@ fun AppBar(
     val client = koinInject<HttpClient>()
     val apiService = ApiService(client)
     var status by remember { mutableStateOf(HttpStatusCode.InternalServerError) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         // Intervals (ms)
         val healthyInterval = 5 * 60_000L       // 5 minutes
-        val unhealthyBase = 15_000L             // 15 seconds when unhealthy
+        val unhealthyBase = 500L                // half second when unhealthy
         val maxBackoff = 5 * 60_000L            // cap backoff at 5 minutes
         var currentInterval = unhealthyBase
         var consecutiveFailures = 0
@@ -103,7 +106,13 @@ fun AppBar(
         actions = {
             Surface(
                 color = if (status == HttpStatusCode.OK) Color.Green else Color.Red,
-                shape = CircleShape
+                shape = CircleShape,
+                onClick = {
+                    status = HttpStatusCode.Processing
+                    scope.launch {
+                        status = apiService.checkHealth()
+                    }
+                }
             ) {
                 Box(
                     modifier = Modifier
