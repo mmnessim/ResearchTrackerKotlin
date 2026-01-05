@@ -15,3 +15,6 @@ object NavTilesRoute : AppRoute
 
 @Serializable
 object OptionsRoute : AppRoute
+
+@Serializable
+object AboutRoute : AppRoute

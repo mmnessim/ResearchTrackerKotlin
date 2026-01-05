@@ -28,6 +28,7 @@ import com.mnessim.researchtrackerkmp.domain.services.ColorSchemeService
 import com.mnessim.researchtrackerkmp.presentation.core.AppBar
 import com.mnessim.researchtrackerkmp.presentation.core.AppStartScheduler
 import com.mnessim.researchtrackerkmp.presentation.core.ColorSchemeDialog
+import com.mnessim.researchtrackerkmp.presentation.screens.aboutScreen.AboutScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen.DetailsScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.homescreen.HomeScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.navTilesScreen.NavTilesScreen
@@ -155,11 +156,20 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                                 .fillMaxSize()
                                 .background(MaterialTheme.colorScheme.surfaceContainer),
                             onHome = { navController.navigate(HomeRoute) },
-                            onOptions = { navController.navigate(OptionsRoute) }
+                            onOptions = { navController.navigate(OptionsRoute) },
+                            onAbout = { navController.navigate(AboutRoute) }
                         )
                     } // composable<NavTilesRoute>
                     composable<OptionsRoute> {
                         OptionsScreen(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                        )
+                    } // composable<OptionsRoute>
+                    composable<AboutRoute> {
+                        AboutScreen(
                             modifier = Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize()

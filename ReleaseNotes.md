@@ -4,7 +4,7 @@
 
 ### Features:
 
-- Health check indicator
+- Health check indicator -> tap to refresh
 - Truncate long descriptions in articles
 - Options screen [IN PROGRESS]
 - Adjust notification/refresh interval [TODO]
@@ -12,6 +12,7 @@
 ### Bug fixes:
 
 - Fixed terms showing no results because of blank field
+- Set permissions for iOS background fetch and background processing
 
 ### Sources:
 

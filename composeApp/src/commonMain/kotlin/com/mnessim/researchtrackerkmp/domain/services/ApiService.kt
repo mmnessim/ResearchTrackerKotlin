@@ -2,6 +2,7 @@ package com.mnessim.researchtrackerkmp.domain.services
 
 import com.mnessim.researchtrackerkmp.ConfigFlags
 import com.mnessim.researchtrackerkmp.domain.models.Article
+import com.mnessim.researchtrackerkmp.domain.models.Stats
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -32,6 +33,17 @@ class ApiService(private val client: HttpClient) {
         } catch (e: Exception) {
             println("Error checking health: $e")
             return HttpStatusCode.InternalServerError
+        }
+    }
+
+    suspend fun getStats(): Stats? {
+        return try {
+            val response = client.get("$url/all")
+            val bodyString = response.bodyAsText()
+            json.decodeFromString<Stats>(bodyString)
+        } catch (e: Exception) {
+            println("Error getting stats $e")
+            null
         }
     }
 }

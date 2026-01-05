@@ -31,7 +31,7 @@ actual class WorkService : KoinComponent {
         intervalMinutes: Long
     ) {
         BGTaskScheduler.sharedScheduler.registerForTaskWithIdentifier(
-            identifier = "Refresh GUID",
+            identifier = "com.mnessim.researchtrackerkmp.fetch",
             usingQueue = null
         ) { task ->
             println("Refreshing GUIDs")
@@ -81,10 +81,11 @@ actual class WorkService : KoinComponent {
 
     @OptIn(ExperimentalForeignApi::class)
     private fun scheduleAppRefreshTask() {
-        val request = BGAppRefreshTaskRequest(identifier = "Update GUIDs")
+        val request =
+            BGAppRefreshTaskRequest(identifier = "com.mnessim.researchtrackerkmp.processing")
         request.earliestBeginDate =
             NSDate().dateByAddingTimeInterval((15 * 60).toDouble()) // 15 minutes
         BGTaskScheduler.sharedScheduler.submitTaskRequest(request, null)
     }
-    
+
 }

@@ -40,6 +40,7 @@ fun NavTilesScreen(
     modifier: Modifier = Modifier,
     onHome: () -> Unit,
     onOptions: () -> Unit,
+    onAbout: () -> Unit
 ) {
     val showAlert = remember { mutableStateOf(false) }
 
@@ -85,7 +86,7 @@ fun NavTilesScreen(
             })
             NavTile(
                 title = "About",
-                onClick = { showAlert.value = true }, tileIcon = {
+                onClick = onAbout, tileIcon = {
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = "About",
@@ -157,5 +158,5 @@ fun NavTile(
 @Preview(showBackground = true)
 @Composable
 fun NavTilesScreenPreview() {
-    NavTilesScreen(onHome = {}, onOptions = {})
+    NavTilesScreen(onHome = {}, onOptions = {}, onAbout = {})
 }
