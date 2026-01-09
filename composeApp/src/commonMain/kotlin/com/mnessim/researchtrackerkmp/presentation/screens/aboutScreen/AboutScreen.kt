@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.mnessim.researchtrackerkmp.ConfigFlags
 import com.mnessim.researchtrackerkmp.domain.models.Stats
 import com.mnessim.researchtrackerkmp.domain.repositories.PreferencesRepo
 import com.mnessim.researchtrackerkmp.domain.services.ApiService
@@ -59,7 +60,7 @@ fun AboutScreen(
         }
         Row {
             Text(
-                text = "Current app version: 1.0.6",
+                text = "Current app version: ${ConfigFlags.AppVersion}",
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurface)
             )
         }
