@@ -13,7 +13,8 @@ class PreferencesRepo(private val database: Database) {
     }
 
     fun getPrefByKey(key: String): String? {
-        return queries.getPreferenceByKey(key).executeAsOneOrNull()?.value_
+        val value = queries.getPreferenceByKey(key).executeAsOneOrNull()?.value_
+        return value
     }
 
     fun insertPref(key: String, value: String) {

@@ -27,17 +27,22 @@ import kotlin.time.Instant
 fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
     val baseFontSize = 16
 
+    // Ktor datetime handling
     val time = parseRfc822ToInstant(article.pubDate ?: "")
     val estZone = TimeZone.of("America/New_York")
     val dateTime = time?.toLocalDateTime(estZone)
     val minuteStr = dateTime?.minute.toString().padStart(2, '0')
     val monthStr = dateTime?.month?.name?.lowercase()?.replaceFirstChar { it.uppercase() } ?: ""
     val timeStr = "$monthStr ${dateTime?.day} ${dateTime?.hour}:${minuteStr}"
+
+    // Rust datetime handling
+    val rustTime = epochMsToLocalStringKmp(article.pubDateMs)
+
     val urlHandler = LocalUriHandler.current
 
     val actualTimeString = if (dateTime != null) {
         timeStr
-    } else article.pubDate ?: ""
+    } else rustTime
 
     SelectionContainer {
         Column(
@@ -142,4 +147,15 @@ fun monthToNumber(month: String): String = when (month) {
     "Nov" -> "11"
     "Dec" -> "12"
     else -> "01"
+}
+
+@OptIn(ExperimentalTime::class)
+fun epochMsToLocalStringKmp(epochMs: Long?, zoneId: String = "America/New_York"): String {
+    if (epochMs == null) return ""
+    val instant = Instant.fromEpochMilliseconds(epochMs)
+    val tz = TimeZone.of(zoneId)
+    val ldt = instant.toLocalDateTime(tz)
+    val minuteStr = ldt.minute.toString().padStart(2, '0')
+    val monthStr = ldt.month.name.lowercase().replaceFirstChar { it.uppercase() }
+    return "$monthStr ${ldt.day} ${ldt.hour}:${minuteStr}"
 }
