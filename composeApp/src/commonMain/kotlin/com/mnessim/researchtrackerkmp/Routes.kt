@@ -18,3 +18,6 @@ object OptionsRoute : AppRoute
 
 @Serializable
 object AboutRoute : AppRoute
+
+@Serializable
+object SavedArticlesRoute : AppRoute

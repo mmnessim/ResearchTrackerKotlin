@@ -33,6 +33,7 @@ import com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen.Details
 import com.mnessim.researchtrackerkmp.presentation.screens.homescreen.HomeScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.navTilesScreen.NavTilesScreen
 import com.mnessim.researchtrackerkmp.presentation.screens.optionsScreen.OptionsScreen
+import com.mnessim.researchtrackerkmp.presentation.screens.savedArticlesScreen.SavedArticlesScreen
 import com.mnessim.researchtrackerkmp.utils.notifications.NotificationManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.dropWhile
@@ -157,7 +158,8 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                                 .background(MaterialTheme.colorScheme.surfaceContainer),
                             onHome = { navController.navigate(HomeRoute) },
                             onOptions = { navController.navigate(OptionsRoute) },
-                            onAbout = { navController.navigate(AboutRoute) }
+                            onAbout = { navController.navigate(AboutRoute) },
+                            onSavedArticles = { navController.navigate(SavedArticlesRoute) }
                         )
                     } // composable<NavTilesRoute>
                     composable<OptionsRoute> {
@@ -170,6 +172,14 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                     } // composable<OptionsRoute>
                     composable<AboutRoute> {
                         AboutScreen(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                        )
+                    } // composable<AboutRoute>
+                    composable<SavedArticlesRoute> {
+                        SavedArticlesScreen(
                             modifier = Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize()

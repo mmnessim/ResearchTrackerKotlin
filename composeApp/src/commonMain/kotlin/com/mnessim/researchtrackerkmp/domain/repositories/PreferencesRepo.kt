@@ -18,7 +18,8 @@ class PreferencesRepo(private val database: Database) {
     }
 
     fun insertPref(key: String, value: String) {
-        queries.insertPreference(key, value)
+        if (getPrefByKey(key) == null)
+            queries.insertPreference(key, value)
     }
 
     fun updatePref(key: String, value: String) {

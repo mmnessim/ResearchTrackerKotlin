@@ -10,10 +10,12 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +43,7 @@ import kotlin.time.Instant
 fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
     val savedArticlesRepo = koinInject<SavedArticlesRepo>()
     var isSaved by remember { mutableStateOf(false) }
+    var showAlert by remember { mutableStateOf(false) }
 
     val baseFontSize = 16
 
@@ -94,7 +97,7 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                             saveArticle(savedArticlesRepo, article)
                             isSaved = true
                         } else {
-                            unsaveArticle(savedArticlesRepo, article)
+                            showAlert = true
                             isSaved = false
                         }
                     }
@@ -147,6 +150,18 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                 }
             }
         }
+    }
+
+    if (showAlert) {
+        UnsaveAlert(
+            onDismiss = {
+                showAlert = false
+            },
+            onConfirm = {
+                showAlert = false
+                unsaveArticle(savedArticlesRepo, article)
+            }
+        )
     }
 }
 
@@ -213,4 +228,29 @@ fun epochMsToLocalStringKmp(epochMs: Long?, zoneId: String = "America/New_York")
     val minuteStr = ldt.minute.toString().padStart(2, '0')
     val monthStr = ldt.month.name.lowercase().replaceFirstChar { it.uppercase() }
     return "$monthStr ${ldt.day} ${ldt.hour}:${minuteStr}"
+}
+
+@Composable
+fun UnsaveAlert(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        text = {
+            Text("Are you sure you want to unsave this article?")
+        },
+        onDismissRequest = {},
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+                content = { Text("Confirm") })
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                content = { Text("Dismiss") }
+            )
+        }
+    )
 }
