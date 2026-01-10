@@ -3,6 +3,9 @@ package com.mnessim.researchtrackerkmp.presentation.screens.homescreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -37,6 +40,8 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val listState = rememberLazyListState()
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
@@ -46,11 +51,13 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                state = listState,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                for (term in terms) {
+                items(terms) { term ->
                     TermRow(
                         term = term,
                         onDelete = { viewmodel.removeTerm(term.id) },
@@ -64,7 +71,7 @@ fun HomeScreen(
                         onNotificationButton = { onNotificationButton(term) },
                     )
                 }
-            } // Column
+            } // LazyColumn
 
             AddTermButton(
                 onClick = { showAlertDialog = true }

@@ -1,6 +1,12 @@
 # Release Notes
 
-## Upcoming Release - Version 1.0.7
+## Upcoming Release - Version 1.0.8
+
+### Bug fixes:
+
+- Fix/implement scrolling on terms screen
+
+## Previous Release - Version 1.0.7
 
 ### Features:
 

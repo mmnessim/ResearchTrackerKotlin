@@ -1,7 +1,7 @@
 package com.mnessim.researchtrackerkmp
 
 object ConfigFlags {
-    const val AppVersion: String = "1.0.7"
+    const val AppVersion: String = "1.0.8"
     const val DEV_BACKEND_URL: String = "https://api.mnessim.com"
 
     // Localhost for local JVM testing
