@@ -8,4 +8,6 @@ data class Term(
     val term: String,
     val locked: Boolean,
     val lastArticleGuid: String? = null
+    // TODO: implement new field, show UI element if true on HomeScreen
+    // val hasNewArticle: Boolean = false
 )

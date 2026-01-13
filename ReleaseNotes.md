@@ -1,6 +1,31 @@
 # Release Notes
 
-## Upcoming Release - Version 1.0.8
+## Upcoming Release - Version 1.0.9
+
+### Features
+
+- TODO: Indicator for terms with new results
+- TODO: Improve design and information in About screen
+- TODO: Fully migrate to Rust backend, remove old backend
+
+### Bug fixes:
+
+- Fix tapping notifications not routing to correct Details screen
+
+### iOS Rework:
+
+Due to iOS handling of background tasks, I have reworked the notification flow on IOS. On Android,
+the app checks for new results every 15 minutes by default, but you can adjust the interval. On iOS,
+background tasks are extremely unreliable, so users may never actually get any notifications. The
+new
+iOS approach is to schedule reminder notifications periodically to launch the app. Once the app is
+launched,
+it can check for updates reliably.
+
+It's a less than ideal solution, and I may adjust in the future to a more robust solution, but it
+should work for now.
+
+## Previous Release - Version 1.0.8
 
 ### Features:
 
@@ -10,6 +35,7 @@
 
 - Fix/implement scrolling on terms screen
 - Probably fixed an issue where adjusting refresh interval causes a crash
+- Fixed issue with multiple notifications not displaying properly on Android
 
 ## Previous Release - Version 1.0.7
 

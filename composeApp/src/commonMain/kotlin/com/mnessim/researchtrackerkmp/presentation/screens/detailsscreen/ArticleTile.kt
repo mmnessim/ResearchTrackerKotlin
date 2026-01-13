@@ -2,8 +2,10 @@ package com.mnessim.researchtrackerkmp.presentation.screens.detailsscreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -26,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,8 +85,8 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                         .weight(1f)
                         .padding(end = 8.dp)
                         .clickable { urlHandler.openUri(article.link) },
-                    text = "${article.title} - ${article.rssSource}",
-                    maxLines = 2,
+                    text = article.title,
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.onSurface,
@@ -98,7 +101,6 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                             isSaved = true
                         } else {
                             showAlert = true
-//                            isSaved = false
                         }
                     }
                 ) {
@@ -109,23 +111,39 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                     )
                 }
             }
-            Text(
-                text = actualTimeString,
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = (baseFontSize).sp
-                )
-            )
-            // 2 Minute Medicine puts raw HTML in article.description
-            if (article.rssSource != "2 Minute Medicine") {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
-                    text = truncateText(article.description, 500),
+                    text = actualTimeString,
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = (baseFontSize).sp
                     )
                 )
+                Text(
+                    text = article.rssSource,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = (baseFontSize + 4).sp,
+                        fontWeight = FontWeight.W600
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
+
+
+            Text(
+                text = truncateText(article.description, 500),
+                style = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = (baseFontSize).sp
+                )
+            )
+
 
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())

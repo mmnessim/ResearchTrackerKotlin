@@ -4,16 +4,17 @@ CREATE TABLE Terms (
     id INTEGER PRIMARY KEY NOT NULL,
     term TEXT NOT NULL,
     locked INTEGER AS Boolean,
-    lastArticleGuid TEXT
+    lastArticleGuid TEXT,
+    hasNewArticle INTEGER AS Boolean
 );
 
 insertTerm:
-INSERT INTO Terms (term, locked, lastArticleGuid)
-VALUES (?, ?, ?);
+INSERT INTO Terms (term, locked, lastArticleGuid, hasNewArticle)
+VALUES (?, ?, ?, ?);
 
 updateTerm:
 UPDATE Terms
-SET term = ?, locked = ?, lastArticleGuid = ?
+SET term = ?, locked = ?, lastArticleGuid = ?, hasNewArticle = ?
 WHERE id = ?;
 
 selectAll:

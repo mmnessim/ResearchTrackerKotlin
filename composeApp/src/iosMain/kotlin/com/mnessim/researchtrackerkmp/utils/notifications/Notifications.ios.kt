@@ -32,6 +32,43 @@ actual class NotificationManager actual constructor() {
 
 //        val center = UNUserNotificationCenter.currentNotificationCenter()
 
+        UNUserNotificationCenter.currentNotificationCenter()
+            .addNotificationRequest(request) { error ->
+                if (error != null) {
+                    // Handle error
+                    println("Notification scheduling failed: $error")
+                } else {
+                    // Success
+                    println("Notification scheduled successfully")
+                }
+            }
+    }
+
+    fun scheduleNotification(title: String, message: String, id: Long, interval: Long) {
+        // TODO: rework content
+        val content = UNMutableNotificationContent().apply {
+            setTitle(title)
+            setBody(message)
+            setUserInfo(
+                mapOf(
+                    "navigate_to" to "home",
+                    "details_id" to -1L // set to -1 to route to HomeRoute
+                )
+            )
+        }
+
+        val trigger = UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(
+            timeInterval = interval * 60.0,
+            repeats = true
+        )
+
+        val request = UNNotificationRequest.requestWithIdentifier(
+            identifier = "local_notification",
+            content = content,
+            trigger = trigger
+        )
+
         UNUserNotificationCenter.currentNotificationCenter().addNotificationRequest(request, null)
+
     }
 }

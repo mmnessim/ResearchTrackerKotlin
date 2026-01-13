@@ -26,7 +26,7 @@ open class TermsRepo(private val database: Database) : ITermsRepo {
     }
 
     override fun insertTerm(term: String, locked: Boolean) {
-        queries.insertTerm(term, locked, null)
+        queries.insertTerm(term, locked, lastArticleGuid = null, hasNewArticle = true)
     }
 
     override fun updateTerm(term: Term) {
@@ -34,7 +34,8 @@ open class TermsRepo(private val database: Database) : ITermsRepo {
             term = term.term,
             locked = term.locked,
             id = term.id,
-            lastArticleGuid = term.lastArticleGuid
+            lastArticleGuid = term.lastArticleGuid,
+            hasNewArticle = false, // TODO: Placeholder
         )
     }
 

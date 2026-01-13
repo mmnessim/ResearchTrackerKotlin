@@ -57,28 +57,34 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
 
     val manager = koinInject<NotificationManager>()
 
-
     LaunchedEffect(Unit) {
         NavigationEvents.navigateToDetails.collectLatest { id ->
             println("Collected navigateToDetails event: $id")
             if (id != null) {
-                val targetRoute = DetailsRoute(id)
-                navController.navigate(DetailsRoute(id)) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-                // Wait for the route to actually change
-                snapshotFlow { navController.currentBackStackEntry?.destination?.route }
-                    .dropWhile { newRoute ->
-                        println("Waiting for route change: $newRoute")
-                        newRoute != targetRoute.toString()
+                if (id == -1L) {
+                    navController.navigate(HomeRoute) {
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    .first()
+                } else {
+                    val targetRoute = DetailsRoute(id)
+                    navController.navigate(DetailsRoute(id)) {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    // Wait for the route to actually change
+                    snapshotFlow { navController.currentBackStackEntry?.destination?.route }
+                        .dropWhile { newRoute ->
+                            println("Waiting for route change: $newRoute")
+                            newRoute != targetRoute.toString()
+                        }
+                        .first()
+                }
                 println("Route changed, resetting navigation event")
                 NavigationEvents.triggerNavigateToDetails(null)
             }
         }
-    }
+    } // LaunchedEffect
 
     Scaffold(
         topBar = {
@@ -130,7 +136,7 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                             onNavigateToTiles = { navController.navigate(NavTilesRoute) },
                             onNotificationButton = { term ->
                                 manager.showNotification(
-                                    title = term.term,
+                                    "New results for ${term.term.replaceFirstChar { it.uppercase() }}",
                                     message = "Tap to see more",
                                     id = term.id
                                 )
@@ -185,7 +191,7 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                                 .fillMaxSize()
                                 .background(MaterialTheme.colorScheme.surfaceContainer)
                         )
-                    }
+                    } // composable<SavedArticlesRoute>
                 } // NavHost
             } // Box
         } // MaterialTheme

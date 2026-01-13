@@ -18,12 +18,14 @@ fun MainViewController(detailsId: NSNumber? = null) = ComposeUIViewController {
         single<DBFactory> { DBFactory() }
         single<WorkService> { WorkService() }
     }
-    startKoin {
+    val koinApp = startKoin {
         modules(commonModules + iosPlatformModule)
     }
 
     MainScope().launch {
         requestNotificationPermissions()
+        val workService = koinApp.koin.get<WorkService>()
+        workService.checkForUpdatesOnAppLaunch()
     }
 
     App(startDestination = if (detailsId == null) NavTilesRoute else DetailsRoute(id = detailsId.longValue))

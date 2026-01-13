@@ -52,6 +52,7 @@ actual class WorkService : KoinComponent {
             }
         }
         scheduleAppRefreshTask(intervalMinutes)
+        schedulePeriodicReminders(1L)
 
     }
 
@@ -61,6 +62,7 @@ actual class WorkService : KoinComponent {
     actual suspend fun performWork(): Boolean {
         return try {
             val terms = termsRepo.getAllTerms()
+            var hasNewResults = false
             for (t in terms) {
                 println("Updating GUID for ${t.term}")
                 val articles = apiService.search(t.term)
@@ -73,29 +75,49 @@ actual class WorkService : KoinComponent {
                             lastArticleGuid = articles[0].guid
                         )
                     )
+                    hasNewResults = true
                     if (t.lastArticleGuid != articles[0].guid) {
                         manager.showNotification(
-                            "${t.term} Results",
+                            "New results for ${t.term.replaceFirstChar { it.uppercase() }}",
                             "Tap to see new results",
                             t.id
                         )
                     }
                 }
             }
-            true
+            // TODO: pull from preferences instead of being 4 hours
+            schedulePeriodicReminders(4L * 60L)
+            hasNewResults
         } catch (e: Exception) {
             println("Error updating GUIDs $e")
             false
         }
     }
 
+    private fun schedulePeriodicReminders(intervalMinutes: Long) {
+        // Schedule a reminder notification that prompts user to open app
+        manager.scheduleNotification(
+            id = 0,
+            title = "Research Tracker",
+            message = "Tap to check for new research updates",
+            interval = intervalMinutes
+        )
+    }
+
+    // TODO probably remove old implementation altogether
     @OptIn(ExperimentalForeignApi::class)
     private fun scheduleAppRefreshTask(intervalMinutes: Long) {
         val request =
             BGAppRefreshTaskRequest(identifier = TASK_ID)
         request.earliestBeginDate =
-            NSDate().dateByAddingTimeInterval((intervalMinutes * 60).toDouble()) // 15 minutes
+            NSDate().dateByAddingTimeInterval((intervalMinutes * 60).toDouble())
         BGTaskScheduler.sharedScheduler.submitTaskRequest(request, null)
     }
 
+    fun checkForUpdatesOnAppLaunch() {
+        println("Checking for updates")
+        scope.launch {
+            performWork()
+        }
+    }
 }

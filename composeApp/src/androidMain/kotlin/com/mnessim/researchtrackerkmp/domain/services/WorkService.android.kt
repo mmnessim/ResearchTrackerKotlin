@@ -98,7 +98,7 @@ class WorkerDelegate(appContext: Context, params: WorkerParameters) :
                 if (t.lastArticleGuid != articles[0].guid && manager != null) {
                     val notificationId = notificationIdGen.incrementAndGet()
                     manager.showNotification(
-                        "${t.term} Results",
+                        "New results for ${t.term.replaceFirstChar { it.uppercase() }}",
                         "Tap to see new results",
                         notificationId.toLong()
                     )

@@ -37,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             NotificationCenter.default.post(name: .navigateToDetails, object: detailsId) // Unneeded??
             NavigationEvents.shared.triggerNavigateToDetails(id: KotlinLong(integerLiteral: (detailsId.intValue)))
             handleTap(response)
+        } else {
+            NavigationEvents.shared.triggerNavigateToDetails(id: KotlinLong(-1))
         }
         completionHandler()
     }
