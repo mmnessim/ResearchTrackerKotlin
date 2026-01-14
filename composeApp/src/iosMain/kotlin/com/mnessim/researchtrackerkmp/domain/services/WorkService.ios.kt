@@ -120,4 +120,30 @@ actual class WorkService : KoinComponent {
             performWork()
         }
     }
+
+    actual suspend fun refreshWithoutNotification(): Boolean {
+        return try {
+            val terms = termsRepo.getAllTerms()
+            for (t in terms) {
+                println("Updating GUID for ${t.term}")
+                val articles = apiService.search(t.term)
+                if (articles.isNotEmpty() && t.lastArticleGuid != articles[0].guid) {
+                    println("New articles for ${t.term}")
+                    termsRepo.updateTerm(
+                        Term(
+                            id = t.id,
+                            term = t.term,
+                            locked = t.locked,
+                            lastArticleGuid = articles[0].guid,
+                            hasNewArticle = true
+                        )
+                    )
+                }
+            }
+            true
+        } catch (e: Exception) {
+            println("Error updating GUIDs $e")
+            false
+        }
+    }
 }

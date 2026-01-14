@@ -28,6 +28,21 @@ class DetailsScreenViewModel(
 
     var term: Term = termsRepo.getTermById(id) ?: Term(-1, "Error Loading Term", false)
 
+    init {
+        // Reset hasNewArticle to false when viewing details
+        if (term.hasNewArticle) {
+            termsRepo.updateTerm(
+                Term(
+                    id = term.id,
+                    term = term.term,
+                    locked = term.locked,
+                    lastArticleGuid = term.lastArticleGuid,
+                    hasNewArticle = false
+                )
+            )
+        }
+    }
+
     fun fetch() {
         viewModelScope.launch {
             println("API called")

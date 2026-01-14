@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
@@ -49,6 +51,16 @@ fun TermRow(
             )
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
+        if (term.hasNewArticle) {
+            Icon(
+                imageVector = Icons.Default.Circle, // or any small icon you prefer
+                contentDescription = "New Article",
+                tint = MaterialTheme.colorScheme.primaryFixedDim,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .size(12.dp)
+            )
+        }
         Row(
             modifier = Modifier
                 .testTag("TermRow")

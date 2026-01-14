@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mnessim.researchtrackerkmp.domain.models.Term
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
+import com.mnessim.researchtrackerkmp.domain.services.WorkService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val termsRepo: ITermsRepo
+    private val termsRepo: ITermsRepo,
+    private val workService: WorkService,
 ) : ViewModel() {
     private var _terms = MutableStateFlow<List<Term>>(emptyList())
     val terms: StateFlow<List<Term>> = _terms.asStateFlow()
@@ -20,6 +22,7 @@ class HomeScreenViewModel(
 
     init {
         loadTerms()
+        refreshTerms()
     }
 
     private fun loadTerms() {
@@ -47,6 +50,13 @@ class HomeScreenViewModel(
     fun toggleLocked(term: Term) {
         viewModelScope.launch {
             termsRepo.updateTerm(Term(id = term.id, term = term.term, locked = !term.locked))
+            loadTerms()
+        }
+    }
+
+    fun refreshTerms() {
+        viewModelScope.launch {
+            workService.refreshWithoutNotification()
             loadTerms()
         }
     }

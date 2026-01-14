@@ -46,7 +46,97 @@ actual class WorkService : KoinComponent {
     }
 
     actual suspend fun performWork(): Boolean {
-        TODO("Not yet implemented")
+        val TAG = "PERFORM WORK"
+        val koin = GlobalContext.getOrNull()
+        if (koin == null) {
+            Log.e(TAG, "Koin not started; retrying later")
+            return false
+        }
+
+        val client = koin.getOrNull<HttpClient>()
+        if (client == null) {
+            Log.e(TAG, "Client not found in Koin;")
+            return false
+        }
+
+        val apiService = ApiService(client)
+
+        val termsRepo = koin.getOrNull<ITermsRepo>()
+        if (termsRepo == null) {
+            Log.e(TAG, "TermsRepo not found in Koin; retrying later")
+            return false
+        }
+
+        val manager = koin.getOrNull<NotificationManager>()
+
+        val terms = termsRepo.getAllTerms()
+        for (t in terms) {
+            println("Updating GUID for ${t.term}")
+            val articles = apiService.search(t.term)
+            if (articles.isNotEmpty()) {
+                termsRepo.updateTerm(
+                    Term(
+                        id = t.id,
+                        term = t.term,
+                        locked = t.locked,
+                        lastArticleGuid = articles[0].guid
+                    )
+                )
+                if (t.lastArticleGuid != articles[0].guid && manager != null) {
+//                    val notificationId = notificationIdGen.incrementAndGet()
+                    manager.showNotification(
+                        "New results for ${t.term.replaceFirstChar { it.uppercase() }}",
+                        "Tap to see new results",
+                        t.id
+                    )
+                }
+            }
+        }
+
+        return true
+    }
+
+    actual suspend fun refreshWithoutNotification(): Boolean {
+        val TAG = "PERFORM WORK"
+        val koin = GlobalContext.getOrNull()
+        if (koin == null) {
+            Log.e(TAG, "Koin not started; retrying later")
+            return false
+        }
+
+        val client = koin.getOrNull<HttpClient>()
+        if (client == null) {
+            Log.e(TAG, "Client not found in Koin;")
+            return false
+        }
+
+        val apiService = ApiService(client)
+
+        val termsRepo = koin.getOrNull<ITermsRepo>()
+        if (termsRepo == null) {
+            Log.e(TAG, "TermsRepo not found in Koin; retrying later")
+            return false
+        }
+
+        val terms = termsRepo.getAllTerms()
+        for (t in terms) {
+            println("Updating GUID for ${t.term}")
+            val articles = apiService.search(t.term)
+            if (articles.isNotEmpty() && t.lastArticleGuid != articles[0].guid) {
+                println("New articles for ${t.term}")
+                termsRepo.updateTerm(
+                    Term(
+                        id = t.id,
+                        term = t.term,
+                        locked = t.locked,
+                        lastArticleGuid = articles[0].guid,
+                        hasNewArticle = true
+                    )
+                )
+            }
+        }
+
+        return true
     }
 
 }

@@ -26,7 +26,7 @@ open class TermsRepo(private val database: Database) : ITermsRepo {
     }
 
     override fun insertTerm(term: String, locked: Boolean) {
-        queries.insertTerm(term, locked, lastArticleGuid = null, hasNewArticle = true)
+        queries.insertTerm(term, locked, lastArticleGuid = null, hasNewArticle = false)
     }
 
     override fun updateTerm(term: Term) {
@@ -35,7 +35,7 @@ open class TermsRepo(private val database: Database) : ITermsRepo {
             locked = term.locked,
             id = term.id,
             lastArticleGuid = term.lastArticleGuid,
-            hasNewArticle = false, // TODO: Placeholder
+            hasNewArticle = term.hasNewArticle
         )
     }
 
@@ -48,7 +48,8 @@ open class TermsRepo(private val database: Database) : ITermsRepo {
             id = row.id,
             term = row.term,
             locked = row.locked ?: false,
-            lastArticleGuid = row.lastArticleGuid
+            lastArticleGuid = row.lastArticleGuid,
+            hasNewArticle = row.hasNewArticle ?: false
         )
     }
 }

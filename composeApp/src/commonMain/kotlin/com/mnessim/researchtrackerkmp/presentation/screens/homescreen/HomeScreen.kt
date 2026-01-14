@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mnessim.researchtrackerkmp.domain.models.Term
 import com.mnessim.researchtrackerkmp.domain.repositories.ITermsRepo
+import com.mnessim.researchtrackerkmp.domain.services.WorkService
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -34,7 +35,9 @@ fun HomeScreen(
     onNotificationButton: (Term) -> Unit,
 ) {
     val repo = koinInject<ITermsRepo>()
-    val viewmodel = remember { HomeScreenViewModel(repo) }
+    val workService = koinInject<WorkService>()
+    val viewmodel = remember { HomeScreenViewModel(repo, workService) }
+
     val terms by viewmodel.terms.collectAsState()
     var showAlertDialog by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
