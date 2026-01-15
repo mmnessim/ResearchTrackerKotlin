@@ -23,7 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.mnessim.researchtrackerkmp.ConfigFlags
+import com.mnessim.researchtrackerkmp.Constants
 import com.mnessim.researchtrackerkmp.domain.models.Stats
 import com.mnessim.researchtrackerkmp.domain.services.ApiService
 import com.mnessim.researchtrackerkmp.isIos
@@ -52,12 +52,12 @@ fun AboutScreen(
         // TODO handle differences with isIos flag
         if (isIos) {
             Text(
-                text = "App version: ${ConfigFlags.APP_VERSION}/iOS",
+                text = "App version: ${Constants.APP_VERSION}/iOS",
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurface)
             )
         } else {
             Text(
-                text = "App version: ${ConfigFlags.APP_VERSION}/Android",
+                text = "App version: ${Constants.APP_VERSION}/Android",
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurface)
             )
         }

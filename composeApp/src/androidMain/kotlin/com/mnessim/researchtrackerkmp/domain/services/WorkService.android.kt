@@ -18,6 +18,7 @@ import org.koin.core.context.GlobalContext
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class WorkService : KoinComponent {
     private val appContext: Context
         get() = GlobalContext.getOrNull()

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ColorScheme
@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.mnessim.researchtrackerkmp.Constants
 import com.mnessim.researchtrackerkmp.domain.services.ApiService
 import io.ktor.client.HttpClient
 import io.ktor.http.HttpStatusCode
@@ -93,11 +94,14 @@ fun AppBar(
             titleContentColor = colorScheme.onSurface,
             actionIconContentColor = colorScheme.onSurface
         ), // colors =
-        title = { Text("Research Tracker") },
+        title = { Text(Constants.APP_TITLE) },
         navigationIcon = if (canPop) {
             {
                 IconButton(onClick = onNavigate) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             }
         } else {

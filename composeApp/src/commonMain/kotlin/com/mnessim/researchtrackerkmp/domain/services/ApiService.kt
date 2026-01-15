@@ -1,6 +1,6 @@
 package com.mnessim.researchtrackerkmp.domain.services
 
-import com.mnessim.researchtrackerkmp.ConfigFlags
+import com.mnessim.researchtrackerkmp.Constants
 import com.mnessim.researchtrackerkmp.domain.models.Article
 import com.mnessim.researchtrackerkmp.domain.models.Stats
 import io.ktor.client.HttpClient
@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 
 class ApiService(private val client: HttpClient) : KoinComponent {
-    val url = ConfigFlags.RUST_BACKEND_URL
+    val url = Constants.RUST_BACKEND_URL
     private val json = Json {
         ignoreUnknownKeys = true
     }
