@@ -90,8 +90,8 @@ android {
         applicationId = "com.mnessim.researchtrackerkmp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 9
-        versionName = "1.0.9"
+        versionCode = 10
+        versionName = "1.0.10"
     }
     packaging {
         resources {

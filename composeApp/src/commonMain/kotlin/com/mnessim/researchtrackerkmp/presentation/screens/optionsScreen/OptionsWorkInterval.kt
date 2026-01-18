@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -126,7 +127,11 @@ fun OptionsWorkInterval(
                         intervalIndex = intervalIndex.roundToInt().toFloat()
                     },
                     valueRange = 0f..(options.lastIndex.toFloat()),
-                    steps = options.size - 2
+                    steps = options.size - 2,
+                    colors = SliderDefaults.colors(
+                        thumbColor = MaterialTheme.colorScheme.onSurface,
+                        activeTrackColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
             }
 

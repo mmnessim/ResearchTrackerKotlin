@@ -1,6 +1,15 @@
 # Release Notes
 
-## Upcoming Release - Version 1.0.9
+## Upcoming Release - Version 1.0.10
+
+### Features
+
+- Changed "Terms" tile to "News" for clarity
+- Added styling to "About" screen
+- Added message to "News" screen if no terms are added
+- Updated backend to more sophisticated search (using Meilisearch)
+
+## Previous Release - Version 1.0.9
 
 ### Features
 

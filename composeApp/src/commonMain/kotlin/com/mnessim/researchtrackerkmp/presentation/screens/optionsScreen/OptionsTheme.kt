@@ -1,5 +1,6 @@
 package com.mnessim.researchtrackerkmp.presentation.screens.optionsScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +57,8 @@ fun OptionsTheme(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 12.dp)
+            .background(color = MaterialTheme.colorScheme.primary),
         color = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(8.dp)
     ) {
