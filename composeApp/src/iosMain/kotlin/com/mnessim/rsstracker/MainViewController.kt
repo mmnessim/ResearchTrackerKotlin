@@ -2,6 +2,7 @@ package com.mnessim.rsstracker
 
 import androidx.compose.ui.window.ComposeUIViewController
 import com.mnessim.rsstracker.domain.data.DBFactory
+import com.mnessim.rsstracker.domain.services.IWorkService
 import com.mnessim.rsstracker.domain.services.WorkService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -20,6 +21,8 @@ fun initKoinIfNeeded(): KoinApplication {
     if (koinApp == null) {
         val iosPlatformModule = module {
             single<DBFactory> { DBFactory() }
+            single<IWorkService> { WorkService() }
+            // Direct WorkService required for iOS specific function call
             single<WorkService> { WorkService() }
         }
         koinApp = startKoin {

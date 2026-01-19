@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.mnessim.rsstracker.domain.repositories.PreferencesRepo
-import com.mnessim.rsstracker.domain.services.WorkService
+import com.mnessim.rsstracker.domain.services.IWorkService
 import com.mnessim.rsstracker.presentation.core.ensureScheduled
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -40,7 +40,7 @@ import kotlin.math.roundToInt
 fun OptionsWorkInterval(
     modifier: Modifier = Modifier
 ) {
-    val workService = koinInject<WorkService>()
+    val workService = koinInject<IWorkService>()
     val prefsRepo = koinInject<PreferencesRepo>()
 
     val options = listOf(15, 30, 45, 60, 120, 300, 480, 720)

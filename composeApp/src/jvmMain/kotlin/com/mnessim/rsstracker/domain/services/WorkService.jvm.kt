@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
 @Suppress(names = ["EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING"])
-actual class WorkService {
+actual class WorkService : IWorkService {
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val scheduler = Executors.newScheduledThreadPool(1)
     private val tasks = ConcurrentHashMap<String, ScheduledFuture<*>>()
 
-    actual fun scheduleWork(
+    actual override fun scheduleWork(
         tag: String,
         periodic: Boolean,
         intervalMinutes: Long
@@ -48,12 +48,12 @@ actual class WorkService {
         }
     }
 
-    actual fun cancelWork(tag: String) {
+    actual override fun cancelWork(tag: String) {
         val future = tasks.remove(tag)
         future?.cancel(true)
     }
 
-    actual suspend fun performWork(): Boolean {
+    actual override suspend fun performWork(): Boolean {
         val koin = GlobalContext.getOrNull() ?: return false
         val client = koin.getOrNull<HttpClient>() ?: return false
         val termsRepo = koin.getOrNull<ITermsRepo>() ?: return false
@@ -90,5 +90,9 @@ actual class WorkService {
             false
         }
 
+    }
+
+    actual override suspend fun refreshWithoutNotification(): Boolean {
+        return performWork()
     }
 }

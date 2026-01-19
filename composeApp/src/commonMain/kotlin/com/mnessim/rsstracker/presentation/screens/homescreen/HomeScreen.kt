@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mnessim.rsstracker.domain.models.Term
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
-import com.mnessim.rsstracker.domain.services.WorkService
+import com.mnessim.rsstracker.domain.services.IWorkService
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -39,7 +39,7 @@ fun HomeScreen(
     onNotificationButton: (Term) -> Unit,
 ) {
     val repo = koinInject<ITermsRepo>()
-    val workService = koinInject<WorkService>()
+    val workService = koinInject<IWorkService>()
     val viewmodel = remember { HomeScreenViewModel(repo, workService) }
 
     val terms by viewmodel.terms.collectAsState()

@@ -73,6 +73,7 @@ class DetailsScreenTest {
                 DetailsScreen(
                     onBack = {},
                     id = 1L,
+                    onError = {}
                 )
             }
             onNodeWithTag("DetailsScreenOuterColumn").assertExists()

@@ -24,7 +24,7 @@ import platform.darwin.dispatch_get_main_queue
  * WorkService has a very different iOS implementation compared to Android
  */
 @Suppress(names = ["EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING"])
-actual class WorkService : KoinComponent {
+actual class WorkService : KoinComponent, IWorkService {
     private val termsRepo by inject<ITermsRepo>()
     private val prefsRepo by inject<PreferencesRepo>()
     private val client by inject<HttpClient>()
@@ -43,7 +43,7 @@ actual class WorkService : KoinComponent {
      *
      * Background tasks are unreliable on iOS, so period reminders are necessary
      */
-    actual fun scheduleWork(
+    actual override fun scheduleWork(
         tag: String,
         periodic: Boolean,
         intervalMinutes: Long
@@ -67,7 +67,7 @@ actual class WorkService : KoinComponent {
 
     }
 
-    actual fun cancelWork(tag: String) {
+    actual override fun cancelWork(tag: String) {
     }
 
     /**
@@ -75,7 +75,7 @@ actual class WorkService : KoinComponent {
      *
      * It is not certain to be called by BGTaskScheduler on iOS
      */
-    actual suspend fun performWork(): Boolean {
+    actual override suspend fun performWork(): Boolean {
         return try {
             val terms = termsRepo.getAllTerms()
             var hasNewResults = false
@@ -126,7 +126,7 @@ actual class WorkService : KoinComponent {
      * refreshWithoutNotifications() replicates performWork() to update hasNewArticle flag without
      * scheduling notifications. It is called when users visit HomeScreen to update
      */
-    actual suspend fun refreshWithoutNotification(): Boolean {
+    actual override suspend fun refreshWithoutNotification(): Boolean {
         return try {
             val terms = termsRepo.getAllTerms()
             for (t in terms) {

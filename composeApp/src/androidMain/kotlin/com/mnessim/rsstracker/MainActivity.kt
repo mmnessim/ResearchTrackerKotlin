@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mnessim.rsstracker.domain.data.DBFactory
+import com.mnessim.rsstracker.domain.services.IWorkService
 import com.mnessim.rsstracker.domain.services.WorkService
 import com.mnessim.rsstracker.utils.notifications.NotificationManager
 import org.koin.android.ext.koin.androidContext
@@ -71,7 +72,7 @@ class AndroidApp : Application() {
             single {
                 NotificationManager().apply { init(get<Context>()) }
             }
-            single<WorkService> {
+            single<IWorkService> {
                 WorkService()
             }
         }

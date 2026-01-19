@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mnessim.rsstracker.domain.models.Term
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
-import com.mnessim.rsstracker.domain.services.WorkService
+import com.mnessim.rsstracker.domain.services.IWorkService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
     private val termsRepo: ITermsRepo,
-    private val workService: WorkService,
+    private val workService: IWorkService,
 ) : ViewModel() {
     private var _terms = MutableStateFlow<List<Term>>(emptyList())
     val terms: StateFlow<List<Term>> = _terms.asStateFlow()

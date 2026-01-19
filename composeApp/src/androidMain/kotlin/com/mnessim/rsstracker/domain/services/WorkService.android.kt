@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual class WorkService : KoinComponent {
+actual class WorkService : KoinComponent, IWorkService {
     private val appContext: Context
         get() = GlobalContext.getOrNull()
             ?.getOrNull<Context>()
@@ -29,7 +29,7 @@ actual class WorkService : KoinComponent {
     private val workManager: WorkManager
         get() = WorkManager.getInstance(appContext)
 
-    actual fun scheduleWork(tag: String, periodic: Boolean, intervalMinutes: Long) {
+    actual override fun scheduleWork(tag: String, periodic: Boolean, intervalMinutes: Long) {
         if (periodic) {
             val request = PeriodicWorkRequestBuilder<WorkerDelegate>(
                 intervalMinutes, TimeUnit.MINUTES
@@ -42,11 +42,11 @@ actual class WorkService : KoinComponent {
         }
     }
 
-    actual fun cancelWork(tag: String) {
+    actual override fun cancelWork(tag: String) {
 
     }
 
-    actual suspend fun performWork(): Boolean {
+    actual override suspend fun performWork(): Boolean {
         val TAG = "PERFORM WORK"
         val koin = GlobalContext.getOrNull()
         if (koin == null) {
@@ -97,7 +97,7 @@ actual class WorkService : KoinComponent {
         return true
     }
 
-    actual suspend fun refreshWithoutNotification(): Boolean {
+    actual override suspend fun refreshWithoutNotification(): Boolean {
         val TAG = "PERFORM WORK"
         val koin = GlobalContext.getOrNull()
         if (koin == null) {
