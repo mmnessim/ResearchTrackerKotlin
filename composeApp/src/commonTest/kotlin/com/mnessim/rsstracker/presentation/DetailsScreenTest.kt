@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
 import com.mnessim.rsstracker.presentation.screens.detailsscreen.DetailsScreen
+import com.mnessim.rsstracker.presentation.screens.homescreen.FakeTermsRepo
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
