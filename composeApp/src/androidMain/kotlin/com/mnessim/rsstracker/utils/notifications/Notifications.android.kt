@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import android.app.NotificationManager as AndroidNotificationManager
@@ -22,6 +23,7 @@ actual class NotificationManager actual constructor() {
         this.context = context
     }
 
+    @RequiresApi(Build.VERSION_CODES.CUPCAKE)
     actual fun showNotification(title: String, message: String, id: Long) {
         val manager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as AndroidNotificationManager
