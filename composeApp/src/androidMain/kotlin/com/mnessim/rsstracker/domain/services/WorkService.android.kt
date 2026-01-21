@@ -1,7 +1,9 @@
 package com.mnessim.rsstracker.domain.services
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
@@ -18,6 +20,7 @@ import org.koin.core.context.GlobalContext
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class WorkService : KoinComponent, IWorkService {
     private val appContext: Context
@@ -29,6 +32,7 @@ actual class WorkService : KoinComponent, IWorkService {
     private val workManager: WorkManager
         get() = WorkManager.getInstance(appContext)
 
+    @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
     actual override fun scheduleWork(tag: String, periodic: Boolean, intervalMinutes: Long) {
         if (periodic) {
             val request = PeriodicWorkRequestBuilder<WorkerDelegate>(

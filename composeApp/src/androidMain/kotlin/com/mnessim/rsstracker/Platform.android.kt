@@ -1,10 +1,8 @@
 package com.mnessim.rsstracker
 
-import android.os.Build
-
-class AndroidPlatform : Platform {
-    override val name: String = "Android ${Build.VERSION.SDK_INT}"
+actual fun getPlatform(): com.mnessim.rsstracker.Platform {
+    TODO("Not yet implemented")
 }
 
-actual fun getPlatform(): Platform = AndroidPlatform()
-actual val isIos = false
+actual val isIos: Boolean
+    get() = false
