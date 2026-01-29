@@ -28,11 +28,13 @@ fun OptionsScreen(
     val blockedFeeds by vm.blocked.collectAsState(initial = emptyList())
 
     Column(
-        modifier = modifier
-            .padding(horizontal = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+
     ) {
-        LazyColumn {
+        LazyColumn(
+            modifier = modifier
+                .padding(horizontal = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             item {
                 OptionsTheme()
             }

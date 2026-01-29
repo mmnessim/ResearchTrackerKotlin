@@ -58,7 +58,10 @@ fun OptionsTheme(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(8.dp)
+            ),
         color = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(8.dp)
     ) {

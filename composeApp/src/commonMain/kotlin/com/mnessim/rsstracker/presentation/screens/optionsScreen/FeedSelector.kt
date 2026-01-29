@@ -33,7 +33,10 @@ fun FeedSelector(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(8.dp)
+            ),
         color = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -52,7 +55,8 @@ fun FeedSelector(
             )
             Spacer(modifier = Modifier.height(8.dp))
             LazyColumn(
-                modifier = modifier.height(500.dp)
+                modifier = modifier.height(500.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(
                     items = feeds,
@@ -66,10 +70,11 @@ fun FeedSelector(
                                 onClick = { toggleBlock(it) }
                             ),
                         color = if (blocked) Color.Red else MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             "$it ${if (blocked) "BLOCKED" else ""}",
-                            modifier = Modifier.padding(4.dp)
+                            modifier = Modifier.padding(8.dp)
                         )
                     }
                 }
