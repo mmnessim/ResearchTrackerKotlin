@@ -27,9 +27,7 @@ fun OptionsScreen(
 
     val blockedFeeds by vm.blocked.collectAsState(initial = emptyList())
 
-    Column(
-
-    ) {
+    Column {
         LazyColumn(
             modifier = modifier
                 .padding(horizontal = 8.dp),
