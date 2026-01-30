@@ -1,6 +1,18 @@
 # Release Notes
 
-## Upcoming Release - Version 1.0.10
+## Upcoming Release - Version 1.0.13
+
+### Bug fixes
+
+- Fixed iOS app crashing when launching from lock screen notification
+
+## Previous Release - Version 1.0.12
+
+### Features
+
+- Add functionality to block results from specific sources
+
+## Previous Release - Version 1.0.10
 
 ### Features
 

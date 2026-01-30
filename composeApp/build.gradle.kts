@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -15,9 +15,16 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
+    androidLibrary {
+        namespace = "com.mnessim.rsstracker"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
+        }
+
+        androidResources {
+            enable = true
         }
     }
 
@@ -80,37 +87,6 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
     }
-}
-
-android {
-    namespace = "com.mnessim.rsstracker"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "com.mnessim.rsstracker"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "1.0.10"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }
 
 compose.desktop {

@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     private val termsRepo: ITermsRepo,
     private val workService: IWorkService,
-
-    ) : ViewModel() {
+) : ViewModel() {
     private var _terms = MutableStateFlow<List<Term>>(emptyList())
     val terms: StateFlow<List<Term>> = _terms.asStateFlow()
 

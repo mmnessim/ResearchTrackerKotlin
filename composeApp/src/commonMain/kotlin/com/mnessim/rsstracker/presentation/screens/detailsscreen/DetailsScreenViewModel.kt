@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mnessim.rsstracker.domain.models.Article
 import com.mnessim.rsstracker.domain.models.Term
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
+import com.mnessim.rsstracker.domain.repositories.PreferencesRepo
 import com.mnessim.rsstracker.domain.services.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,8 @@ import kotlin.time.Instant
 class DetailsScreenViewModel(
     id: Long,
     private val termsRepo: ITermsRepo,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val prefsRepo: PreferencesRepo
 ) : ViewModel() {
 
     private var _response = MutableStateFlow<List<Article>>(emptyList())
@@ -25,6 +27,9 @@ class DetailsScreenViewModel(
 
     private var _loading = MutableStateFlow<Boolean>(true)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()
+
+    private var _blocked = MutableStateFlow<List<String>>(emptyList())
+    val blocked: StateFlow<List<String>> = _blocked.asStateFlow()
 
     var term: Term = termsRepo.getTermById(id) ?: Term(-1, "Error Loading Term", false)
 
@@ -41,6 +46,7 @@ class DetailsScreenViewModel(
                 )
             )
         }
+        loadBlocked()
     }
 
     fun fetch() {
@@ -61,6 +67,10 @@ class DetailsScreenViewModel(
 
             else -> return
         }
+    }
+
+    fun loadBlocked() {
+        _blocked.value = prefsRepo.getPrefByKey("blockedFeeds")?.split(",") ?: emptyList<String>()
     }
 
     private fun updateGuid() {

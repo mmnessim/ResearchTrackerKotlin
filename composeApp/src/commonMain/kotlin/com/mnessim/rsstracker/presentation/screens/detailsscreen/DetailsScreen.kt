@@ -31,6 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
+import com.mnessim.rsstracker.domain.repositories.PreferencesRepo
 import com.mnessim.rsstracker.domain.services.ApiService
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
@@ -46,15 +47,19 @@ fun DetailsScreen(
     val repo = koinInject<ITermsRepo>()
     val client = koinInject<HttpClient>()
     val apiService = ApiService(client)
+    val prefsRepo = koinInject<PreferencesRepo>()
     val viewModel = remember(id) {
         DetailsScreenViewModel(
             apiService = apiService,
             id = id,
-            termsRepo = repo
+            termsRepo = repo,
+            prefsRepo = prefsRepo
         )
     }
-    val articles = viewModel.response.collectAsState()
-    val loading = viewModel.loading.collectAsState()
+
+    val articles by viewModel.response.collectAsState()
+    val loading by viewModel.loading.collectAsState()
+    val blocked by viewModel.blocked.collectAsState()
     val term = viewModel.term
 
     if (term.id == -1L) {
@@ -102,7 +107,7 @@ fun DetailsScreen(
         ) {
             Text(
                 modifier = Modifier.testTag("Term"),
-                text = "${term.term} - ${articles.value.size} Results",
+                text = "${term.term} - ${articles.size} Results",
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
@@ -110,7 +115,7 @@ fun DetailsScreen(
             )
         }
 
-        if (!loading.value) {
+        if (!loading) {
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -122,18 +127,26 @@ fun DetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 itemsIndexed(
-                    articles.value.take(showAmount),
+                    articles.take(showAmount),
                     key = { index, a -> a.guid ?: "${a.link}-$index" }) { i, a ->
+                    val isBlocked = blocked.contains(a.rssSource)
 
-                    ArticleTile(
-                        modifier = Modifier.border(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(8.dp)
-                        ).testTag("ArticleTile"),
-                        article = a,
-                    )
-
+                    if (!isBlocked) {
+                        ArticleTile(
+                            modifier = Modifier.border(
+                                width = 2.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(8.dp)
+                            ).testTag("ArticleTile"),
+                            article = a,
+                        )
+                    }
+                    // TODO: Maybe add functionality to override blocked terms?
+//                    } else {
+//                        Surface {
+//                            Text("Blocked result from ${a.rssSource}. Show anyways?")
+//                        }
+//                    }
                 }
             }
         } else {
@@ -145,7 +158,7 @@ fun DetailsScreen(
                 val old = showAmount
                 showAmount += 10
 
-                val newly = articles.value.drop(old).take(showAmount - old).map { it.guid }
+                val newly = articles.drop(old).take(showAmount - old).map { it.guid }
                 if (newly.isNotEmpty()) {
                     coroutineScope.launch {
                         listState.animateScrollToItem(old)
@@ -159,7 +172,7 @@ fun DetailsScreen(
             }
         }
 
-        if (loading.value) {
+        if (loading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),

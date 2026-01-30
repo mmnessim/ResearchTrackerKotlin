@@ -5,9 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
-import com.mnessim.rsstracker.MainActivity
 import android.app.NotificationManager as AndroidNotificationManager
 
 actual class NotificationManager actual constructor() {
@@ -23,6 +23,7 @@ actual class NotificationManager actual constructor() {
         this.context = context
     }
 
+    @RequiresApi(Build.VERSION_CODES.CUPCAKE)
     actual fun showNotification(title: String, message: String, id: Long) {
         val manager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as AndroidNotificationManager
@@ -38,15 +39,15 @@ actual class NotificationManager actual constructor() {
             manager.createNotificationChannel(channel)
         }
 
-        val intent = Intent(context, MainActivity::class.java).apply {
+        // Use an implicit deep-link intent so this KMP module doesn't need to reference MainActivity
+        val deepLinkUri = "rsstracker://details/$id".toUri()
+        val intent = Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
             putExtra("navigate_to", "details")
             putExtra("details_id", id.toString())
-            data = "researchtracker://details/$id".toUri()
-            action = "com.mnessim.rsstracker.ACTION_SHOW_DETAILS_$id"
+//            action = "com.mnessim.rsstracker.ACTION_SHOW_DETAILS_$id"
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        // TODO: if notifications still navigate incorrectly, uncommend and pass to pendingIntent
         val requestCode = ((id xor (id ushr 32)).toInt())
         val pendingIntent = PendingIntent.getActivity(
             context,

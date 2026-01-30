@@ -16,10 +16,22 @@
         <activity
             android:exported="true"
             android:name=".MainActivity">
+            <!-- Launcher intent-filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Deep link intent-filter for rsstracker://details/{id} -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="rsstracker"
+                    android:host="details" />
             </intent-filter>
         </activity>
     </application>

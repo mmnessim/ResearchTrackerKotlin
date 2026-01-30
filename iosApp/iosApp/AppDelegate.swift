@@ -1,7 +1,6 @@
 import UIKit
 import UserNotifications
 import Foundation
-import ComposeApp
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(
@@ -33,13 +32,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if let idString = userInfo["details_id"] as? String, let id = Int(idString) {
             detailsId = NSNumber(value: id)
         }
-        if let detailsId = detailsId {
-            NotificationCenter.default.post(name: .navigateToDetails, object: detailsId) // Unneeded??
-            NavigationEvents.shared.triggerNavigateToDetails(id: KotlinLong(integerLiteral: (detailsId.intValue)))
-            handleTap(response)
-        } else {
-            NavigationEvents.shared.triggerNavigateToDetails(id: KotlinLong(-1))
+
+        // Persist the tapped id so the SwiftUI app can read it if its subscriber hasn't been created yet.
+        DispatchQueue.main.async {
+            if let detailsId = detailsId {
+                UserDefaults.standard.set(detailsId.intValue, forKey: "pendingDetailsId")
+                NotificationCenter.default.post(name: .navigateToDetails, object: detailsId)
+                self.handleTap(response)
+            } else {
+                // No details id -> navigate home; remove any pending key
+                UserDefaults.standard.removeObject(forKey: "pendingDetailsId")
+                NotificationCenter.default.post(name: .navigateToDetails, object: nil)
+            }
         }
+
         completionHandler()
     }
 
