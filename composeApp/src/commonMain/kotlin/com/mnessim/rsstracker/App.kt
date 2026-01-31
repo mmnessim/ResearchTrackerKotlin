@@ -105,7 +105,7 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
                 ColorSchemeDialog(
                     activeScheme = colorScheme,
                     onDismiss = { showColorSchemeDialog = false },
-                    onColorSchemeChange = { it ->
+                    onColorSchemeChange = {
                         colorService.setScheme(it)
                     },
                 ) // ColorSchemeDialog
