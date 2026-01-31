@@ -75,7 +75,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(terms) { term ->
-                    TermRow(
+                    TermRowB(
                         term = term,
                         onDelete = { viewmodel.removeTerm(term.id) },
                         onDeleteBlocked = {
