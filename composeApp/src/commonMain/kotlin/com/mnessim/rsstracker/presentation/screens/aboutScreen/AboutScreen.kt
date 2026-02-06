@@ -55,6 +55,20 @@ fun AboutScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
+                AboutTile(
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                    title = "About",
+                    description = "RSSTracker lets you track news on topics you care about",
+                    extraText = "No accounts, no data sharing, just pure privacy. Instantly search " +
+                            "and follow terms, with your preferences stored only on your device. " +
+                            "Stay informed with fresh articles from trusted RSS feeds, all in one " +
+                            "simple, secure app."
+                )
+            }
+            item {
                 if (isIos) {
                     AboutTile(
                         title = "App Version",
@@ -70,6 +84,10 @@ fun AboutScreen(
 
             item {
                 AboutTile(
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
                     title = "Developer Information",
                     description = "Developed by Mounir Nessim",
                     extraText = "Email mnessimdev@gmail.com to provide feedback"
@@ -96,14 +114,14 @@ fun AboutScreen(
                     AboutTile(
                         modifier = Modifier
                             .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(8.dp)
-                            )
-                            .clickable(
-                                onClick = {
-                                    uriHandler.openUri("https://github.com/mmnessim/ResearchTrackerKotlin")
-                                }
                             ),
+//                            .clickable(
+//                                onClick = {
+//                                    uriHandler.openUri("https://github.com/mmnessim/ResearchTrackerKotlin")
+//                                }
+//                            ),
                         title = "Source Code",
                         description = "View on Github"
                     )
