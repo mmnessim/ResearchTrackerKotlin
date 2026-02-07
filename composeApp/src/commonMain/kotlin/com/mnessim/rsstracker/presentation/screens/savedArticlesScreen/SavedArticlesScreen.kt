@@ -1,13 +1,11 @@
 package com.mnessim.rsstracker.presentation.screens.savedArticlesScreen
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,11 +46,6 @@ fun SavedArticlesScreen(modifier: Modifier = Modifier) {
             items(articles.value, key = { it.guid ?: it.title }) { article: Article ->
                 ArticleTile(
                     article = article,
-                    modifier = Modifier.border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
                 )
             }
         }

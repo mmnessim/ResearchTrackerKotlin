@@ -34,6 +34,7 @@ import com.mnessim.rsstracker.presentation.screens.homescreen.HomeScreen
 import com.mnessim.rsstracker.presentation.screens.navTilesScreen.NavTilesScreen
 import com.mnessim.rsstracker.presentation.screens.optionsScreen.OptionsScreen
 import com.mnessim.rsstracker.presentation.screens.savedArticlesScreen.SavedArticlesScreen
+import com.mnessim.rsstracker.presentation.theme.AppTypography
 import com.mnessim.rsstracker.utils.notifications.NotificationManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.dropWhile
@@ -98,7 +99,8 @@ fun App(startDestination: AppRoute = NavTilesRoute) {
         } // topBar =
     ) { innerPadding ->
         MaterialTheme(
-            colorScheme = colorScheme
+            colorScheme = colorScheme,
+            typography = AppTypography
         ) {
 
             if (showColorSchemeDialog) {

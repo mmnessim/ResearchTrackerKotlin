@@ -1,6 +1,5 @@
 package com.mnessim.rsstracker.presentation.screens.detailsscreen
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mnessim.rsstracker.domain.repositories.ITermsRepo
@@ -108,9 +106,10 @@ fun DetailsScreen(
             Text(
                 modifier = Modifier.testTag("Term"),
                 text = "${term.term} - ${articles.size} Results",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 20.sp
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp
                 )
             )
         }
@@ -133,11 +132,7 @@ fun DetailsScreen(
 
                     if (!isBlocked) {
                         ArticleTile(
-                            modifier = Modifier.border(
-                                width = 2.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(8.dp)
-                            ).testTag("ArticleTile"),
+                            modifier = Modifier.testTag("ArticleTile"),
                             article = a,
                         )
                     }

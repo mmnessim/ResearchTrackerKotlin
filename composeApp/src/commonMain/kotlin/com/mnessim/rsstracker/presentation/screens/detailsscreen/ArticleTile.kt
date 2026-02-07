@@ -5,17 +5,24 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -27,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,53 +53,38 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
     val savedArticlesRepo = koinInject<SavedArticlesRepo>()
     var isSaved by remember { mutableStateOf(false) }
     var showAlert by remember { mutableStateOf(false) }
-
     val baseFontSize = 16
-
-    // Ktor datetime handling
-    val time = parseRfc822ToInstant(article.pubDate ?: "")
-    val estZone = TimeZone.of("America/New_York")
-    val dateTime = time?.toLocalDateTime(estZone)
-    val minuteStr = dateTime?.minute.toString().padStart(2, '0')
-    val monthStr = dateTime?.month?.name?.lowercase()?.replaceFirstChar { it.uppercase() } ?: ""
-    val timeStr = "$monthStr ${dateTime?.day} ${dateTime?.hour}:${minuteStr}"
-
-    // Rust datetime handling
-    val rustTime = epochMsToLocalStringKmp(article.pubDateMs)
-
+    val actualTimeString = epochMsToLocalStringKmp(article.pubDateMs)
     val urlHandler = LocalUriHandler.current
-
-    val actualTimeString = if (dateTime != null) {
-        timeStr
-    } else rustTime
 
     LaunchedEffect(Unit) {
         val article = savedArticlesRepo.getOneArticle(article.guid)
         isSaved = article != null
     }
 
-    SelectionContainer {
-        Column(
-            modifier = modifier.padding(8.dp)
-                .clickable(
-                    onClick = { urlHandler.openUri(article.link) }
-                )
-        ) {
+    Card(
+        modifier = modifier
+            .padding(vertical = 6.dp, horizontal = 12.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 8.dp)
                         .clickable { urlHandler.openUri(article.link) },
                     text = article.title,
-                    maxLines = 3,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = (baseFontSize + 8).sp
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = (baseFontSize + 4).sp
+//                        fontWeight = FontWeight.Bold
                     )
                 )
-
                 IconButton(
                     onClick = {
                         if (!isSaved) {
@@ -107,10 +98,11 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
                     Icon(
                         imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Default.BookmarkBorder,
                         contentDescription = "Save Article",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.secondary
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -118,52 +110,51 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
             ) {
                 Text(
                     text = actualTimeString,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = (baseFontSize).sp
+
                     )
                 )
                 Text(
                     text = article.rssSource,
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = (baseFontSize + 4).sp,
-                        fontWeight = FontWeight.W600
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = (baseFontSize).sp,
+                        fontWeight = FontWeight.SemiBold
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
-
-
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
             Text(
                 text = truncateText(article.description, 500),
-                style = TextStyle(
+                style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = (baseFontSize).sp
                 )
             )
-
-
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
-                for ((i, c) in article.categories.withIndex()) {
-                    Text(
-                        text = c,
-                        style = TextStyle(
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = (baseFontSize - 4).sp
-                        )
-                    )
-                    if (i < article.categories.size) {
+                article.categories.forEachIndexed { i, c ->
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    ) {
                         Text(
-                            text = " | ",
-                            style = TextStyle(
-                                color = MaterialTheme.colorScheme.onSurface,
+                            text = c,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.primary,
                                 fontSize = (baseFontSize - 4).sp
                             )
                         )
+                    }
+                    if (i < article.categories.size - 1) {
+                        Spacer(modifier = Modifier.width(4.dp))
                     }
                 }
             }
@@ -172,9 +163,7 @@ fun ArticleTile(modifier: Modifier = Modifier, article: Article) {
 
     if (showAlert) {
         UnsaveAlert(
-            onDismiss = {
-                showAlert = false
-            },
+            onDismiss = { showAlert = false },
             onConfirm = {
                 showAlert = false
                 isSaved = false
